@@ -1,4 +1,4 @@
-package com.example.currency.data.models
+package com.example.currency.data.models.convert
 
 data class ConvertModel(
     val date: String,

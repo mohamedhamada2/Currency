@@ -34,6 +34,7 @@
                     android:background="@drawable/spinner_bg"/>
 
                 <ImageView
+                    android:id="@+id/swap_img"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_centerInParent="true"

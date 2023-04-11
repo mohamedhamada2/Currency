@@ -9,16 +9,13 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.room.Room
 import com.example.currency.data.Currency
 import com.example.currency.data.CurrencyBase
 import com.example.currency.data.CurrencyModel
-import com.example.currency.data.room.CurrencyExchange
 import com.example.currency.data.room.DatabaseClass
 import com.example.currency.data.sqlite.DBHelper
 import com.example.currency.databinding.ActivityMainBinding
@@ -39,6 +36,8 @@ class MainActivity : AppCompatActivity() {
     var databaseClass: DatabaseClass? = null
     var all_value:Double? =0.0
     val db = DBHelper(this, null)
+    lateinit var convertfromAdapter: ArrayAdapter<String>
+    lateinit var converttoAdapter: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,8 +128,10 @@ class MainActivity : AppCompatActivity() {
 
         })*/
         activityMainBinding.detail.setOnClickListener(View.OnClickListener {
-            var intent = Intent(this,DetailsActivity::class.java)
-            startActivity(intent)
+            go_to_details()
+        })
+        activityMainBinding.swapImg.setOnClickListener(View.OnClickListener {
+            swap()
         })
         mainViewModel1.currencybaseMutableLiveData.observe(this, Observer {
             set_currenct_base(it)
@@ -148,6 +149,21 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun go_to_details() {
+        var intent = Intent(this,DetailsActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun swap() {
+        activityMainBinding.fromSpinner.adapter = converttoAdapter
+        activityMainBinding.toSpinner.adapter = convertfromAdapter
+        val spinnerPosition: Int = convertfromAdapter.getPosition(currency_to_key)
+        val spinnerPosition2: Int = converttoAdapter.getPosition(currency_from_key)
+        activityMainBinding.fromSpinner.setSelection(spinnerPosition)
+        activityMainBinding.toSpinner.setSelection(spinnerPosition2)
+        mainViewModel1.convert_currency(currency_to_key,currency_from_key,activityMainBinding.etInput.text.toString().toDouble())
+    }
+
     private fun set_currency(t: CurrencyModel?) {
         for (keys in t!!.symbols.keys) {
             var value = t!!.symbols.getValue(keys)
@@ -159,8 +175,8 @@ class MainActivity : AppCompatActivity() {
             currencyvaluelist.add(currency.key)
         }
         //t!!.symbols.toString().length
-        val aa = ArrayAdapter(this@MainActivity,R.layout.spinner_item,currencyvaluelist)
-        activityMainBinding.fromSpinner.adapter = aa
+        convertfromAdapter = ArrayAdapter(this@MainActivity,R.layout.spinner_item,currencyvaluelist)
+        activityMainBinding.fromSpinner.adapter = convertfromAdapter
     }
 
     private fun set_currenct_base(it: CurrencyBase?) {
@@ -176,9 +192,9 @@ class MainActivity : AppCompatActivity() {
             currencybasevaluelist.add(currency.key)
         }
         //t!!.symbols.toString().length
-        val aa = ArrayAdapter(this@MainActivity,R.layout.spinner_item,currencybasevaluelist)
+        converttoAdapter = ArrayAdapter(this@MainActivity,R.layout.spinner_item,currencybasevaluelist)
 
-        activityMainBinding.toSpinner.adapter = aa
+        activityMainBinding.toSpinner.adapter = converttoAdapter
 
     }
 }

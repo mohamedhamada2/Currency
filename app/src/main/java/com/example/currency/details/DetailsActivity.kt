@@ -3,10 +3,9 @@ package com.example.currency.details
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
-import com.example.currency.MainViewModel
 import com.example.currency.R
 import com.example.currency.data.room.CurrencyExchange
 import com.example.currency.data.room.DatabaseClass
@@ -25,19 +24,24 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
         activityDetailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_details)
-        detailsViewModel1 = ViewModelProvider(this).get(DetailsViewModel::class.java)
+        //detailsViewModel1 = ViewModelProvider(this).get(DetailsViewModel::class.java)
+        detailsViewModel1 = DetailsViewModel(this)
         activityDetailsBinding.detailsviewmodel = detailsViewModel1
         /*databaseClass = Room.databaseBuilder(getApplicationContext(),
             DatabaseClass::class.java, "my_orders2"
         ).allowMainThreadQueries().build()
         exchangelist = databaseClass.dao?.get_all_exchanges()!!*/
-        exchangelist = db.readCurrency()!!
-        detailsAdapter = DetailsAdapter(exchangelist)
+        detailsViewModel1.get_date()
+        detailsViewModel1.currencyMutableLiveData.observe(this, Observer {
+            setlist(it)
+        })
+
+    }
+
+    private fun setlist(currencyExchanges: List<CurrencyExchange>) {
+        detailsAdapter = DetailsAdapter(currencyExchanges)
         layout_manager = LinearLayoutManager(this)
         activityDetailsBinding.detailsRecycler.adapter = detailsAdapter
         activityDetailsBinding.detailsRecycler.layoutManager = layout_manager;
-
-
-
     }
 }

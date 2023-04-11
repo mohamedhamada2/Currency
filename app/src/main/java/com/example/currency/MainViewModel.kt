@@ -7,10 +7,9 @@ import com.example.currency.api.Api
 import com.example.currency.api.RetrofitClientInstance
 import com.example.currency.data.CurrencyBase
 import com.example.currency.data.CurrencyModel
-import com.example.currency.data.models.ConvertModel
+import com.example.currency.data.models.convert.ConvertModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.functions.Consumer
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MainViewModel : ViewModel() {

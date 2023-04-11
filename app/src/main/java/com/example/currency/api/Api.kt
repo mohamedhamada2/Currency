@@ -1,13 +1,10 @@
 package com.example.currency.api
 
 
-import android.icu.util.CurrencyAmount
 import com.example.currency.data.CurrencyBase
 import com.example.currency.data.CurrencyModel
-import com.example.currency.data.models.ConvertModel
-import io.reactivex.rxjava3.core.Observable
+import com.example.currency.data.models.convert.ConvertModel
 import io.reactivex.rxjava3.core.Single
-import retrofit2.Response
 import retrofit2.http.*
 
 interface Api {
