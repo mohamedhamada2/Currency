@@ -1,10 +1,9 @@
-package com.example.currency
+package com.example.currency.main
 
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -13,11 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.currency.R
 import com.example.currency.api.Api
 import com.example.currency.dagger.MyApplication
-import com.example.currency.data.Currency
-import com.example.currency.data.CurrencyBase
-import com.example.currency.data.CurrencyModel
+import com.example.currency.data.models.currency.Currency
+import com.example.currency.data.models.currency.CurrencyModel
 import com.example.currency.data.room.DatabaseClass
 import com.example.currency.data.sqlite.DBHelper
 import com.example.currency.databinding.ActivityMainBinding
@@ -37,19 +36,21 @@ class MainActivity : AppCompatActivity() {
     lateinit var currencybasevalue: String
     lateinit var currency_to_key: String
     lateinit var date:String
-    var databaseClass: DatabaseClass? = null
+
     var all_value:Double? =0.0
     val db = DBHelper(this, null)
     lateinit var convertfromAdapter: ArrayAdapter<String>
     lateinit var converttoAdapter: ArrayAdapter<String>
     @Inject
     lateinit var retrofit: Retrofit
+    @Inject
+    lateinit var databaseClass: DatabaseClass
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        (application as MyApplication).getNetComponent()!!.inject(this)
+        (application as MyApplication).getAppComponent()!!.inject(this)
         mainViewModel1 = ViewModelProvider(this).get(MainViewModel::class.java)
         activityMainBinding.mainviewmodel = mainViewModel1
         /*databaseClass = Room.databaseBuilder(getApplicationContext(),
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         currencybaselist = ArrayList()
         currencybasevaluelist = ArrayList()
         val api: Api = retrofit.create(Api::class.java)
-        mainViewModel1.get_currency(api)
+        mainViewModel1.get_currency(api, databaseClass!!)
         activityMainBinding.fromSpinner.setOnItemSelectedListener(object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -69,12 +70,6 @@ class MainActivity : AppCompatActivity() {
                 position: Int,
                 id: Long) {
                 currency_from_key = currencylist.get(position).key
-                Log.d("currency_key",currency_from_key)
-                mainViewModel1.get_currency_base(currency_from_key,api)
-                //Toast.makeText(M)
-                //city_name = allCities.get(position).getCityName()
-                //allCity.setCityId(city_id)
-                //allCity.setCityName(city_name)
                 try {
                     val textView = view as TextView
                     textView.setTextColor(resources.getColor(R.color.black))
@@ -91,15 +86,12 @@ class MainActivity : AppCompatActivity() {
                 view: View,
                 position: Int,
                 id: Long) {
-                currencybasevalue = currencybaselist.get(position).value
-                currency_to_key = currencybaselist.get(position).key
-                //Toast.makeText(this@MainActivity, currencybasevalue+"",Toast.LENGTH_LONG).show()
+                //currencybasevalue = currencybaselist.get(position).value
+                currency_to_key = currencylist.get(position).key
                 activityMainBinding.etInput.addTextChangedListener(object : TextWatcher {
                     override fun onTextChanged(cs: CharSequence?, arg1: Int, arg2: Int, arg3: Int) {
                         if (cs.toString() != ""){
                             var amount = cs.toString()
-                            /*all_value = (all_value_string.toDouble()) * currencybasevalue.toDouble()
-                            activityMainBinding.etOutput.setText(all_value.toString())*/
                             mainViewModel1.convert_currency(currency_from_key,currency_to_key,amount.toDouble(),api)
                         }
                     }
@@ -141,20 +133,37 @@ class MainActivity : AppCompatActivity() {
         activityMainBinding.swapImg.setOnClickListener(View.OnClickListener {
             swap(api)
         })
-        mainViewModel1.currencybaseMutableLiveData.observe(this, Observer {
+        /*mainViewModel1.currencybaseMutableLiveData.observe(this, Observer {
             set_currenct_base(it)
-        })
+        })*/
         mainViewModel1.currencyMutableLiveData.observe(this,object : Observer<CurrencyModel> {
             override fun onChanged(t: CurrencyModel?) {
                 //Log.d("list", t!!.symbols.size.toString())
                 set_currency(t)
             }
         })
+        mainViewModel1.currencyerrorLiveData.observe(this, Observer {
+             set_currency_error(it)
+        })
         mainViewModel1.convertcurrencyLiveData.observe(this, Observer {
             activityMainBinding.etOutput.setText(it.result.toString())
             db.addCurrency(it.query.from,it.query.to,it.info.rate.toString(),it.query.amount.toString(),it.result.toString(),it.date)
         })
 
+    }
+
+    private fun set_currency_error(currencies: List<Currency>) {
+        currencylist = currencies as ArrayList<Currency>
+        for (currency in currencylist) {
+            currencyvaluelist.add(currency.key)
+            currencybasevaluelist.add(currency.key)
+        }
+        //t!!.symbols.toString().length
+        convertfromAdapter = ArrayAdapter(this@MainActivity, R.layout.spinner_item,currencyvaluelist)
+        converttoAdapter = ArrayAdapter(this@MainActivity,
+            R.layout.spinner_item,currencybasevaluelist)
+        activityMainBinding.fromSpinner.adapter = convertfromAdapter
+        activityMainBinding.toSpinner.adapter = converttoAdapter
     }
 
     private fun go_to_details() {
@@ -176,18 +185,22 @@ class MainActivity : AppCompatActivity() {
         for (keys in t!!.symbols.keys) {
             var value = t!!.symbols.getValue(keys)
             var currency = Currency(keys,value)
+            databaseClass?.dao?.AddCurrencySymbols(currency)
             currencylist.add(currency)
             // myCode;
+
         }
         for (currency in currencylist) {
             currencyvaluelist.add(currency.key)
         }
         //t!!.symbols.toString().length
-        convertfromAdapter = ArrayAdapter(this@MainActivity,R.layout.spinner_item,currencyvaluelist)
+        convertfromAdapter = ArrayAdapter(this@MainActivity, R.layout.spinner_item,currencyvaluelist)
+        converttoAdapter = ArrayAdapter(this@MainActivity, R.layout.spinner_item,currencyvaluelist)
         activityMainBinding.fromSpinner.adapter = convertfromAdapter
+        activityMainBinding.toSpinner.adapter = converttoAdapter
     }
 
-    private fun set_currenct_base(it: CurrencyBase?) {
+    /*private fun set_currenct_base(it: CurrencyBase?) {
         date = it!!.date
         currencybaselist.clear()
         for (keys in it!!.rates.keys) {
@@ -204,5 +217,5 @@ class MainActivity : AppCompatActivity() {
 
         activityMainBinding.toSpinner.adapter = converttoAdapter
 
-    }
+    }*/
 }

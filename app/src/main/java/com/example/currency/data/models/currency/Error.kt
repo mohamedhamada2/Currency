@@ -1,4 +1,4 @@
-package com.example.currency.data
+package com.example.currency.data.models.currency
 
 data class Error(
     val code: Int,

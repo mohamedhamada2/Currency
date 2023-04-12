@@ -5,12 +5,12 @@
     <data>
         <variable
             name="mainviewmodel"
-            type="com.example.currency.MainViewModel" />
+            type="com.example.currency.main.MainViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity"
+        tools:context=".main.MainActivity"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintVertical_bias="0.5">
         <LinearLayout

@@ -3,6 +3,8 @@ package com.example.currency.data.room
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.example.currency.data.models.currency.Currency
+
 @androidx.room.Dao
 interface Dao {
     @Insert
@@ -17,4 +19,9 @@ interface Dao {
 
     @Update
     fun editproduct(basketModel: CurrencyExchange?)
+
+    @Insert
+    fun AddCurrencySymbols(currency: Currency)
+    @Query("select * from currency2")
+    fun get_all_currency_symbols(): List<Currency>?
 }
