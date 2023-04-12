@@ -17,7 +17,6 @@ class MainViewModel : ViewModel() {
      var currencyMutableLiveData: MutableLiveData<CurrencyModel> = MutableLiveData<CurrencyModel>()
      var convertcurrencyLiveData: MutableLiveData<ConvertModel> = MutableLiveData<ConvertModel>()
      var currencyerrorLiveData :MutableLiveData<List<Currency>> = MutableLiveData<List<Currency>>()
-     lateinit var databaseClass :DatabaseClass
     fun get_currency(api: Api,databaseClass: DatabaseClass) {
         val observable: Single<CurrencyModel> = api.get_currency(Constants.key).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         observable.subscribe(
