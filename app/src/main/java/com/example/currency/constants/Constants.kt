@@ -3,6 +3,6 @@ package com.example.currency.constants
 class Constants {
     companion object{
         val url = "https://api.apilayer.com/fixer/"
-        var key = "nfYY9HwHi4jS4PzIDyLR5LXBaeZESpYw"
+        var key = "Dl1dtMaK98jVrQPMN1XDg1Yf3WEGwCGS"
     }
 }
