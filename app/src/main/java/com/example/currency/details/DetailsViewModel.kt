@@ -9,9 +9,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel  @Inject constructor(var dbHelper: DBHelper) : ViewModel() {
-    init {
+
         var currencyMutableLiveData: MutableLiveData<List<CurrencyExchange>> = MutableLiveData<List<CurrencyExchange>>()
-        currencyMutableLiveData.value= dbHelper.readCurrency()
-    }
+       init {
+           currencyMutableLiveData.value= dbHelper.readCurrency()
+       }
+
 
 }

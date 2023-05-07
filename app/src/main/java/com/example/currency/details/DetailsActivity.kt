@@ -30,10 +30,10 @@ class DetailsActivity : AppCompatActivity() {
         detailsViewModel1 = ViewModelProvider(this)[DetailsViewModel::class.java]
         //(application as MyApplication).getAppComponent()!!.inject(this)
         activityDetailsBinding.detailsviewmodel = detailsViewModel1
-        detailsViewModel1.get_date(dbHelper)
         detailsViewModel1.currencyMutableLiveData.observe(this, Observer {
             setlist(it)
         })
+
 
     }
 

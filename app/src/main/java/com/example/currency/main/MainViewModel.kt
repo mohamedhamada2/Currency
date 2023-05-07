@@ -25,7 +25,6 @@ class MainViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
     var currencylist: ArrayList<Currency> = ArrayList()
     var  currencyvaluelist : ArrayList<String> = ArrayList()
     fun get_currency(mainActivity: MainActivity) {
-        //application.getAppComponent().inject(this)
         currency_single = currencyRepositoryImp.get_currency().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         compositeDisposable.add(currency_single.subscribe(
             { o: CurrencyModel? -> setCurrencyData(o,mainActivity) },
@@ -65,8 +64,7 @@ class MainViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
 
             convert_currency_single = currencyRepositoryImp.convert_currency(currencyFromKey, currencyToKey, amount)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            compositeDisposable.add(
-                convert_currency_single.subscribe(
+            compositeDisposable.add(convert_currency_single.subscribe(
                     { o: ConvertModel? -> convertcurrencyLiveData.value = o },
                     { e: Throwable -> Log.d("convert_error", "$e") })
             )
