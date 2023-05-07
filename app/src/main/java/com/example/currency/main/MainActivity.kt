@@ -38,8 +38,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var currency_to_key: String
     lateinit var date:String
 
-    var all_value:Double? =0.0
-    val db = DBHelper(this, null)
     lateinit var convertfromAdapter: ArrayAdapter<String>
     lateinit var converttoAdapter: ArrayAdapter<String>
     private val mainViewModel1:MainViewModel by viewModels()
@@ -142,7 +140,7 @@ class MainActivity : AppCompatActivity() {
         })
         mainViewModel1.convertcurrencyLiveData.observe(this, Observer {
             activityMainBinding.etOutput.setText(it.result.toString())
-            db.addCurrency(it.query.from,it.query.to,it.info.rate.toString(),it.query.amount.toString(),it.result.toString(),it.date)
+            mainViewModel1.addCurrency(it.query.from,it.query.to,it.info.rate.toString(),it.query.amount.toString(),it.result.toString(),it.date)
         })
 
     }

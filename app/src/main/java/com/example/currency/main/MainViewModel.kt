@@ -15,7 +15,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 @HiltViewModel
-class MainViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepositoryImp,var databaseClass:DatabaseClass) : ViewModel() {
+class MainViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepositoryImp,var databaseClass:DatabaseClass,var dbHelper: DBHelper) : ViewModel() {
     var currencyMutableLiveData: MutableLiveData<CurrencyModel> = MutableLiveData<CurrencyModel>()
     var convertcurrencyLiveData: MutableLiveData<ConvertModel> = MutableLiveData<ConvertModel>()
     var currencyerrorLiveData :MutableLiveData<List<Currency>> = MutableLiveData<List<Currency>>()
@@ -24,8 +24,6 @@ class MainViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
     var compositeDisposable:CompositeDisposable = CompositeDisposable()
     var currencylist: ArrayList<Currency> = ArrayList()
     var  currencyvaluelist : ArrayList<String> = ArrayList()
-    /*@Inject
-    lateinit var dbHelper:DBHelper*/
     fun get_currency(mainActivity: MainActivity) {
         //application.getAppComponent().inject(this)
         currency_single = currencyRepositoryImp.get_currency().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -73,6 +71,10 @@ class MainViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
                     { e: Throwable -> Log.d("convert_error", "$e") })
             )
         }
+
+    fun addCurrency(from: String, to: String, rate: String, amount: String, result: String, date: String) {
+        dbHelper.addCurrency(from,to,rate,amount,result,date)
+    }
     /*fun addCurrency(from: String, to: String, rate: String, amount: String, result: String, date: String) {
         dbHelper.addCurrency(from,to,rate,amount,result,date)
     }*/
