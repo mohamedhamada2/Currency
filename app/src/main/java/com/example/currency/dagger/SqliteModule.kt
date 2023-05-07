@@ -4,18 +4,18 @@ import android.content.Context
 import com.example.currency.data.sqlite.DBHelper
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-class SqliteModule {
-    var context: Context
+@InstallIn(SingletonComponent::class)
+object SqliteModule {
 
-    constructor(context: Context) {
-        this.context = context
-    }
     @Provides
     @Singleton
-    fun providesSQlite():DBHelper{
+    fun providesSQlite(@ApplicationContext context: Context):DBHelper{
         val db = DBHelper(context, null)
         return db
     }

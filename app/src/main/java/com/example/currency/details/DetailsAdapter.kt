@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currency.R
 import com.example.currency.data.room.CurrencyExchange
+import com.example.currency.databinding.CurrencyItemBinding
 
 class DetailsAdapter (private val mList: List<CurrencyExchange?>) : RecyclerView.Adapter<DetailsAdapter.ViewHolder>() {
 
@@ -18,27 +19,24 @@ class DetailsAdapter (private val mList: List<CurrencyExchange?>) : RecyclerView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // inflates the card_view_design view
         // that is used to hold list item
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.currency_item, parent, false)
+        val binding = CurrencyItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return ViewHolder(view)
+        return ViewHolder(binding)
     }
 
     // binds the list items to a view
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        with(holder){
+            with(mList[position]){
+                binding.txtDate.text = this?.date
+                binding.txtAmount.text = this?.amount
+                binding.txtFrom.text = this?.from_currency
+                binding.txtTo.text = this?.to_currency
+                binding.total.text= this?.total
+                binding.total.text= this?.base
 
-        val currencyExchangemodel = mList[position]
-
-        // sets the image to the imageview from our itemHolder class
-
-        // sets the text to the textview from our itemHolder class
-        holder.txt_date.setText(currencyExchangemodel!!.date)
-        holder.txt_from.setText(currencyExchangemodel!!.from_currency)
-        holder.txt_to.setText(currencyExchangemodel.to_currency)
-        holder.txt_total.setText(currencyExchangemodel.total)
-        holder.txt_currency_base.setText(currencyExchangemodel.base)
-        holder.txt_amount.setText(currencyExchangemodel.amount)
-
+            }
+        }
     }
 
     // return the number of the items in the list
@@ -47,12 +45,6 @@ class DetailsAdapter (private val mList: List<CurrencyExchange?>) : RecyclerView
     }
 
     // Holds the views for adding it to image and text
-    class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
-        val txt_date: TextView = itemView.findViewById(R.id.txt_date)
-        val txt_total: TextView = itemView.findViewById(R.id.txt_total)
-        val txt_from: TextView = itemView.findViewById(R.id.txt_from)
-        val txt_to: TextView = itemView.findViewById(R.id.txt_to)
-        val txt_amount: TextView = itemView.findViewById(R.id.txt_amount)
-        val txt_currency_base: TextView = itemView.findViewById(R.id.txt_currency_base)
+    inner class ViewHolder(val binding: CurrencyItemBinding) : RecyclerView.ViewHolder(binding.root) {
     }
 }
