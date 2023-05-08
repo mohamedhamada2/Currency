@@ -16,6 +16,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepositoryImp,var databaseClass:DatabaseClass,var dbHelper: DBHelper) : ViewModel() {
+
     var currencyMutableLiveData: MutableLiveData<CurrencyModel> = MutableLiveData<CurrencyModel>()
     var convertcurrencyLiveData: MutableLiveData<ConvertModel> = MutableLiveData<ConvertModel>()
     var currencyerrorLiveData :MutableLiveData<List<Currency>> = MutableLiveData<List<Currency>>()
@@ -24,10 +25,10 @@ class MainViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
     var compositeDisposable:CompositeDisposable = CompositeDisposable()
     var currencylist: ArrayList<Currency> = ArrayList()
     var  currencyvaluelist : ArrayList<String> = ArrayList()
-    fun get_currency(mainActivity: MainActivity) {
+    fun get_currency(homeFragment: HomeFragment) {
         currency_single = currencyRepositoryImp.get_currency().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         compositeDisposable.add(currency_single.subscribe(
-            { o: CurrencyModel? -> setCurrencyData(o,mainActivity) },
+            { o: CurrencyModel? -> setCurrencyData(o,homeFragment) },
             { e: Throwable -> get_error_data(e,databaseClass) }))
        /* val observable: Single<CurrencyModel> = api.get_currency(Constants.key)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -46,18 +47,18 @@ class MainViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
         compositeDisposable.clear()
     }
 
-    private fun setCurrencyData(currencymodel: CurrencyModel?,mainActivity: MainActivity) {
+    private fun setCurrencyData(currencymodel: CurrencyModel?,homeFragment: HomeFragment) {
         for (keys in currencymodel?.symbols!!.keys) {
             var value = currencymodel?.symbols!!.getValue(keys)
             var currency = Currency(keys, value)
             //databaseClass?.dao?.AddCurrencySymbols(currency)
             currencylist.add(currency)
             databaseClass.dao?.AddCurrencySymbols(currency)
-            currencyMutableLiveData.value = currencymodel
+            currencyMutableLiveData.value = currencymodel!!
             for (currency in currencylist) {
                 currencyvaluelist.add(currency.key)
             }
-            mainActivity.setSpinnerAdapter(currencylist,currencyvaluelist)
+            homeFragment.setSpinnerAdapter(currencylist,currencyvaluelist)
         }
     }
     fun convert_currency(currencyFromKey: String, currencyToKey: String, amount: Double) {

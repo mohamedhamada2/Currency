@@ -13,6 +13,8 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.example.currency.R
 import com.example.currency.api.Api
 import com.example.currency.dagger.MyApplication
@@ -22,31 +24,26 @@ import com.example.currency.data.room.DatabaseClass
 import com.example.currency.data.sqlite.DBHelper
 import com.example.currency.databinding.ActivityMain2Binding
 import com.example.currency.databinding.ActivityMainBinding
-import com.example.currency.details.DetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Retrofit
 import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    lateinit var navController: NavController
     lateinit var activityMainBinding: ActivityMainBinding
-    lateinit var currencylist: ArrayList<Currency>
-    lateinit var currencyvaluelist: ArrayList<String>
-    lateinit var currencybaselist: ArrayList<Currency>
-    lateinit var currencybasevaluelist: ArrayList<String>
-    lateinit var currency_from_key:String
-    lateinit var currencybasevalue: String
-    lateinit var currency_to_key: String
-    lateinit var date:String
-
-    lateinit var convertfromAdapter: ArrayAdapter<String>
-    lateinit var converttoAdapter: ArrayAdapter<String>
-    private val mainViewModel1:MainViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        activityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+        setContentView(activityMainBinding.root)
+        //homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        navController = navHostFragment.navController
 
+
+        /*activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setContentView(activityMainBinding.root)
         activityMainBinding.mainviewmodel = mainViewModel1
         /*databaseClass = Room.databaseBuilder(getApplicationContext(),
             DatabaseClass::class.java, "my_orders2"
@@ -141,11 +138,11 @@ class MainActivity : AppCompatActivity() {
         mainViewModel1.convertcurrencyLiveData.observe(this, Observer {
             activityMainBinding.etOutput.setText(it.result.toString())
             mainViewModel1.addCurrency(it.query.from,it.query.to,it.info.rate.toString(),it.query.amount.toString(),it.result.toString(),it.date)
-        })
+        })*/
 
     }
 
-    private fun set_currency_error(currencies: List<Currency>) {
+    /*private fun set_currency_error(currencies: List<Currency>) {
         currencylist = currencies as ArrayList<Currency>
         for (currency in currencylist) {
             currencyvaluelist.add(currency.key)
@@ -197,7 +194,7 @@ class MainActivity : AppCompatActivity() {
         converttoAdapter = ArrayAdapter(this@MainActivity, R.layout.spinner_item,currencyvaluelist)
         activityMainBinding.fromSpinner.adapter = convertfromAdapter
         activityMainBinding.toSpinner.adapter = converttoAdapter
-    }
+    }*/
 
     /*private fun set_currenct_base(it: CurrencyBase?) {
         date = it!!.date

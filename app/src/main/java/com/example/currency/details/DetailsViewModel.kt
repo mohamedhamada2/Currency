@@ -10,7 +10,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel  @Inject constructor(var dbHelper: DBHelper) : ViewModel() {
 
-        var currencyMutableLiveData: MutableLiveData<List<CurrencyExchange>> = MutableLiveData<List<CurrencyExchange>>()
+       var currencyMutableLiveData: MutableLiveData<List<CurrencyExchange>> = MutableLiveData<List<CurrencyExchange>>()
        init {
            currencyMutableLiveData.value= dbHelper.readCurrency()
        }
