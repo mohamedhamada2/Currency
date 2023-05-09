@@ -14,32 +14,51 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
-@HiltViewModel
-class MainViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepositoryImp,var databaseClass:DatabaseClass,var dbHelper: DBHelper) : ViewModel() {
+import javax.inject.Named
 
-    var currencyMutableLiveData: MutableLiveData<CurrencyModel> = MutableLiveData<CurrencyModel>()
+@HiltViewModel
+class MainViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepositoryImp,
+                                        var databaseClass:DatabaseClass,
+                                        var dbHelper: DBHelper,
+                                        @Named("network_connection")var connect_network:Boolean) : ViewModel() {
+
+    var currencyMutableLiveData: MutableLiveData<CurrencyModel?> = MutableLiveData<CurrencyModel?>()
     var convertcurrencyLiveData: MutableLiveData<ConvertModel> = MutableLiveData<ConvertModel>()
-    var currencyerrorLiveData :MutableLiveData<List<Currency>> = MutableLiveData<List<Currency>>()
+    var currencyLiveData :MutableLiveData<ArrayList<Currency>> = MutableLiveData<ArrayList<Currency>>()
+    var currencyvalueMutableLiveData: MutableLiveData< ArrayList<String>> = MutableLiveData<ArrayList<String>>()
     lateinit var currency_single :Single<CurrencyModel>
     lateinit var convert_currency_single: Single<ConvertModel>
     var compositeDisposable:CompositeDisposable = CompositeDisposable()
     var currencylist: ArrayList<Currency> = ArrayList()
     var  currencyvaluelist : ArrayList<String> = ArrayList()
-    fun get_currency(homeFragment: HomeFragment) {
-        currency_single = currencyRepositoryImp.get_currency().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        compositeDisposable.add(currency_single.subscribe(
-            { o: CurrencyModel? -> setCurrencyData(o,homeFragment) },
-            { e: Throwable -> get_error_data(e,databaseClass) }))
-       /* val observable: Single<CurrencyModel> = api.get_currency(Constants.key)
-            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        compositeDisposable.add(observable.subscribe(
-            { o: CurrencyModel? -> currencyMutableLiveData.value = o },
-            { e: Throwable -> get_error_data(e,databaseClass) }))*/
+    init {
+        get_currency()
     }
 
-    private fun get_error_data(e: Throwable, databaseClass: DatabaseClass) {
+    fun get_currency() {
+        if (connect_network){
+            currency_single = currencyRepositoryImp.get_currency().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            compositeDisposable.add(currency_single.subscribe(
+                { o: CurrencyModel? -> setCurrencyData(o) },
+                { e: Throwable -> get_error_data(e) }))
+        }else{
+            get_currency_from_local_db()
+        }
+    }
+
+    private fun get_currency_from_local_db() {
+        currencylist = databaseClass.dao?.get_all_currency_symbols() as ArrayList<Currency>
+        for (currency in currencylist) {
+            currencyvaluelist.add(currency.key)
+            //currencybasevaluelist.add(currency.key)
+        }
+        currencyLiveData.value = currencylist
+        currencyvalueMutableLiveData.value = currencyvaluelist
+    }
+
+    private fun get_error_data(e: Throwable) {
         Log.d("errormmm", "$e")
-        currencyerrorLiveData.value = databaseClass.dao?.get_all_currency_symbols()
+
     }
 
     override fun onCleared() {
@@ -47,18 +66,21 @@ class MainViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
         compositeDisposable.clear()
     }
 
-    private fun setCurrencyData(currencymodel: CurrencyModel?,homeFragment: HomeFragment) {
+    private fun setCurrencyData(
+        currencymodel: CurrencyModel?) {
         for (keys in currencymodel?.symbols!!.keys) {
-            var value = currencymodel?.symbols!!.getValue(keys)
-            var currency = Currency(keys, value)
+            val value = currencymodel.symbols.getValue(keys)
+            val currency = Currency(keys, value)
             //databaseClass?.dao?.AddCurrencySymbols(currency)
             currencylist.add(currency)
             databaseClass.dao?.AddCurrencySymbols(currency)
-            currencyMutableLiveData.value = currencymodel!!
+            currencyMutableLiveData.value = currencymodel
             for (currency in currencylist) {
                 currencyvaluelist.add(currency.key)
             }
-            homeFragment.setSpinnerAdapter(currencylist,currencyvaluelist)
+            currencyvalueMutableLiveData.value = currencyvaluelist
+            currencyLiveData.value = currencylist
+            //homeFragment.setSpinnerAdapter(currencylist,currencyvaluelist)
         }
     }
     fun convert_currency(currencyFromKey: String, currencyToKey: String, amount: Double) {

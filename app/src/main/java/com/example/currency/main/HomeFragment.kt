@@ -16,20 +16,15 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.currency.R
 import com.example.currency.data.models.currency.Currency
+import com.example.currency.data.models.currency.CurrencyModel
 import com.example.currency.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     lateinit var currencylist: ArrayList<Currency>
-    lateinit var currencyvaluelist: ArrayList<String>
-    lateinit var currencybaselist: ArrayList<Currency>
-    lateinit var currencybasevaluelist: ArrayList<String>
+    var currencyvaluelist: ArrayList<String> =  ArrayList()
     lateinit var currency_from_key:String
     lateinit var currencybasevalue: String
     lateinit var currency_to_key: String
@@ -45,96 +40,24 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fragmentHomeBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-        val view = fragmentHomeBinding.root;
-        // Inflate the layout for this fragment
+        fragmentHomeBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         fragmentHomeBinding.mainviewmodel = mainViewModel1
-        /*databaseClass = Room.databaseBuilder(getApplicationContext(),
-            DatabaseClass::class.java, "my_orders2"
-        ).allowMainThreadQueries().build()*/
-        currencyvaluelist = ArrayList()
-        currencybaselist = ArrayList()
-        currencybasevaluelist = ArrayList()
-        //val api: Api = retrofit.create(Api::class.java)
-        mainViewModel1.get_currency(this)
-        fragmentHomeBinding.fromSpinner.setOnItemSelectedListener(object :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View,
-                position: Int,
-                id: Long) {
-                currency_from_key = currencylist.get(position).key
-                try {
-                    val textView = view as TextView
-                    textView.setTextColor(resources.getColor(R.color.black))
-                } catch (e: java.lang.Exception) {
-                }
-            }
+        val view = fragmentHomeBinding.root
+        init()
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        })
-        fragmentHomeBinding.toSpinner.setOnItemSelectedListener(object :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View,
-                position: Int,
-                id: Long) {
-                //currencybasevalue = currencybaselist.get(position).value
-                currency_to_key = currencylist.get(position).key
-                fragmentHomeBinding.etInput.addTextChangedListener(object : TextWatcher {
-                    override fun onTextChanged(cs: CharSequence?, arg1: Int, arg2: Int, arg3: Int) {
-                        if (cs.toString() != ""){
-                            var amount = cs.toString()
-                            mainViewModel1.convert_currency(currency_from_key,currency_to_key,amount.toDouble())
-                        }
-                    }
 
-                    override fun beforeTextChanged(arg0: CharSequence?, arg1: Int, arg2: Int, arg3: Int) {
 
-                    }
-
-                    override fun afterTextChanged(arg0: Editable?) {
-
-                    }
-                })
-                if (fragmentHomeBinding.etInput.text.toString() != ""){
-                    mainViewModel1.convert_currency(currency_from_key,currency_to_key,fragmentHomeBinding.etInput.text.toString().toDouble())
-                }
-                //Toast.makeText(M)
-                //city_name = allCities.get(position).getCityName()
-                //allCity.setCityId(city_id)
-                //allCity.setCityName(city_name)
-                try {
-                    val textView = view as TextView
-                    textView.setTextColor(resources.getColor(R.color.black))
-                } catch (e: java.lang.Exception) {
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        })
         fragmentHomeBinding.detail.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_detailsFragment)
             //go_to_details()
         }
-        /*fragmentHomeBinding.swapImg.setOnClickListener(View.OnClickListener {
-            swap(api)
+        fragmentHomeBinding.swapImg.setOnClickListener(View.OnClickListener {
+            swap()
         })
-        mainViewModel1.currencybaseMutableLiveData.observe(this, Observer {
+        /*mainViewModel1.currencybaseMutableLiveData.observe(this, Observer {
             set_currenct_base(it)
         })*/
-        mainViewModel1.currencyMutableLiveData.observe(viewLifecycleOwner, {
 
-            //Log.d("list", t!!.symbols.size.toString())
-            //set_currency(it)
-
-        })
-        mainViewModel1.currencyerrorLiveData.observe(viewLifecycleOwner, Observer {
-            set_currency_error(it)
-        })
         mainViewModel1.convertcurrencyLiveData.observe(viewLifecycleOwner, Observer {
             fragmentHomeBinding.etOutput.setText(it.result.toString())
             mainViewModel1.addCurrency(it.query.from,it.query.to,it.info.rate.toString(),it.query.amount.toString(),it.result.toString(),it.date)
@@ -142,11 +65,89 @@ class HomeFragment : Fragment() {
         return view
     }
 
-    private fun set_currency_error(currencies: List<Currency>?) {
+    private fun init() {
+        mainViewModel1.currencyLiveData.observe(viewLifecycleOwner) {
+            //set_currency(it)
+            currencylist = it
+        }
+        mainViewModel1.currencyvalueMutableLiveData.observe(viewLifecycleOwner) {
+            //set_currency(it)
+            currencyvaluelist = it
+            setSpinnerAdapter(currencyvaluelist)
+        }
+        fragmentHomeBinding.fromSpinner.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View,
+                position: Int,
+                id: Long) {
+                currency_from_key = currencylist[position].key
+                try {
+                    val textView = view as TextView
+                    textView.setTextColor(resources.getColor(R.color.black))
+                } catch (e: java.lang.Exception) {
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        fragmentHomeBinding.toSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View,
+                position: Int,
+                id: Long) {
+                currency_to_key = currencylist[position].key
+                mainViewModel1.convert_currency(currency_from_key,currency_to_key,fragmentHomeBinding.etInput.text.toString().toDouble())
+                try {
+                    val textView = view as TextView
+                    textView.setTextColor(resources.getColor(R.color.black))
+                } catch (e: java.lang.Exception) {
+
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        fragmentHomeBinding.etInput.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(cs: CharSequence?, arg1: Int, arg2: Int, arg3: Int) {
+                if (cs.toString() != ""){
+                    var amount = cs.toString()
+                    mainViewModel1.convert_currency(currency_from_key,currency_to_key,amount.toDouble())
+                }
+            }
+
+            override fun beforeTextChanged(arg0: CharSequence?, arg1: Int, arg2: Int, arg3: Int) {
+
+            }
+
+            override fun afterTextChanged(arg0: Editable?) {
+
+            }
+        })
+    }
+
+    /*private fun set_currency(currencymodel: CurrencyModel?) {
+        for (keys in currencymodel?.symbols!!.keys) {
+            var value = currencymodel?.symbols!!.getValue(keys)
+            var currency = Currency(keys, value)
+            //databaseClass?.dao?.AddCurrencySymbols(currency)
+            currencylist.add(currency)
+            databaseClass.dao?.AddCurrencySymbols(currency)
+            currencyMutableLiveData.value = currencymodel
+            for (currency in currencylist) {
+                currencyvaluelist.add(currency.key)
+            }
+            homeFragment.setSpinnerAdapter(currencylist,currencyvaluelist)
+        }
+    }*/
+
+
+    /*private fun set_currency_error(currencies: List<Currency>?) {
         currencylist = currencies as ArrayList<Currency>
         for (currency in currencylist) {
             currencyvaluelist.add(currency.key)
-            currencybasevaluelist.add(currency.key)
         }
         //t!!.symbols.toString().length
         convertfromAdapter =
@@ -157,15 +158,23 @@ class HomeFragment : Fragment() {
         )
         fragmentHomeBinding.fromSpinner.adapter = convertfromAdapter
         fragmentHomeBinding.toSpinner.adapter = converttoAdapter
-    }
+    }*/
 
-    fun setSpinnerAdapter(currencylist: ArrayList<Currency>, currencyvaluelist: ArrayList<String>) {
-        this.currencylist = currencylist
+    private fun setSpinnerAdapter(currencyvaluelist: ArrayList<String>) {
         this.currencyvaluelist = currencyvaluelist
         convertfromAdapter =
             ArrayAdapter(requireActivity(), R.layout.spinner_item, currencyvaluelist)
         converttoAdapter = ArrayAdapter(requireActivity(), R.layout.spinner_item, currencyvaluelist)
         fragmentHomeBinding.fromSpinner.adapter = convertfromAdapter
         fragmentHomeBinding.toSpinner.adapter = converttoAdapter
+    }
+    private fun swap() {
+        fragmentHomeBinding.fromSpinner.adapter = converttoAdapter
+        fragmentHomeBinding.toSpinner.adapter = convertfromAdapter
+        val spinnerPosition: Int = convertfromAdapter.getPosition(currency_to_key)
+        val spinnerPosition2: Int = converttoAdapter.getPosition(currency_from_key)
+        fragmentHomeBinding.fromSpinner.setSelection(spinnerPosition)
+        fragmentHomeBinding.toSpinner.setSelection(spinnerPosition2)
+        mainViewModel1.convert_currency(currency_to_key,currency_from_key,fragmentHomeBinding.etInput.text.toString().toDouble())
     }
 }
