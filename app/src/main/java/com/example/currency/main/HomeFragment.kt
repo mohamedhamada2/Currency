@@ -47,10 +47,10 @@ class HomeFragment : Fragment() {
 
 
 
-        fragmentHomeBinding.detail.setOnClickListener {
+        /*fragmentHomeBinding.detail.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_detailsFragment)
             //go_to_details()
-        }
+        }*/
         fragmentHomeBinding.swapImg.setOnClickListener(View.OnClickListener {
             swap()
         })
@@ -75,57 +75,6 @@ class HomeFragment : Fragment() {
             currencyvaluelist = it
             setSpinnerAdapter(currencyvaluelist)
         }
-        fragmentHomeBinding.fromSpinner.onItemSelectedListener = object :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View,
-                position: Int,
-                id: Long) {
-                currency_from_key = currencylist[position].key
-                try {
-                    val textView = view as TextView
-                    textView.setTextColor(resources.getColor(R.color.black))
-                } catch (e: java.lang.Exception) {
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-        fragmentHomeBinding.toSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View,
-                position: Int,
-                id: Long) {
-                currency_to_key = currencylist[position].key
-                mainViewModel1.convert_currency(currency_from_key,currency_to_key,fragmentHomeBinding.etInput.text.toString().toDouble())
-                try {
-                    val textView = view as TextView
-                    textView.setTextColor(resources.getColor(R.color.black))
-                } catch (e: java.lang.Exception) {
-
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-        fragmentHomeBinding.etInput.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(cs: CharSequence?, arg1: Int, arg2: Int, arg3: Int) {
-                if (cs.toString() != ""){
-                    var amount = cs.toString()
-                    mainViewModel1.convert_currency(currency_from_key,currency_to_key,amount.toDouble())
-                }
-            }
-
-            override fun beforeTextChanged(arg0: CharSequence?, arg1: Int, arg2: Int, arg3: Int) {
-
-            }
-
-            override fun afterTextChanged(arg0: Editable?) {
-
-            }
-        })
     }
 
     /*private fun set_currency(currencymodel: CurrencyModel?) {
@@ -167,7 +116,65 @@ class HomeFragment : Fragment() {
         converttoAdapter = ArrayAdapter(requireActivity(), R.layout.spinner_item, currencyvaluelist)
         fragmentHomeBinding.fromSpinner.adapter = convertfromAdapter
         fragmentHomeBinding.toSpinner.adapter = converttoAdapter
+        setData()
     }
+
+    private fun setData() {
+        fragmentHomeBinding.fromSpinner.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View,
+                position: Int,
+                id: Long) {
+                currency_from_key = currencylist[position].key
+                try {
+                    val textView = view as TextView
+                    textView.setTextColor(resources.getColor(R.color.black))
+                } catch (e: java.lang.Exception) {
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
+        fragmentHomeBinding.toSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View,
+                position: Int,
+                id: Long) {
+                currency_to_key = currencylist[position].key
+                mainViewModel1.convert_currency(currency_from_key,currency_to_key,fragmentHomeBinding.etInput.text.toString().toDouble())
+                try {
+                    val textView = view as TextView
+                    textView.setTextColor(resources.getColor(R.color.black))
+                } catch (e: java.lang.Exception) {
+
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        fragmentHomeBinding.etInput.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(cs: CharSequence?, arg1: Int, arg2: Int, arg3: Int) {
+                if (cs.toString() != ""){
+                    var amount = cs.toString()
+                    mainViewModel1.convert_currency(currency_from_key,currency_to_key,amount.toDouble())
+                }
+            }
+
+            override fun beforeTextChanged(arg0: CharSequence?, arg1: Int, arg2: Int, arg3: Int) {
+
+            }
+
+            override fun afterTextChanged(arg0: Editable?) {
+
+            }
+        })
+    }
+
     private fun swap() {
         fragmentHomeBinding.fromSpinner.adapter = converttoAdapter
         fragmentHomeBinding.toSpinner.adapter = convertfromAdapter

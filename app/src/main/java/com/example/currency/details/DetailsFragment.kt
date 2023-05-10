@@ -33,10 +33,10 @@ class DetailsFragment : Fragment() {
         detailsViewModel1.currencyMutableLiveData.observe(viewLifecycleOwner, Observer {
             setlist(it)
         })
-        fragmentDetailsBinding.backImg.setOnClickListener {
+        /*fragmentDetailsBinding.backImg.setOnClickListener {
             findNavController().navigate(R.id.action_detailsFragment_to_homeFragment)
             //go_to_details()
-        }
+        }*/
         return fragmentDetailsBinding.root
     }
 

@@ -14,7 +14,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.currency.R
 import com.example.currency.api.Api
 import com.example.currency.dagger.MyApplication
@@ -22,25 +26,28 @@ import com.example.currency.data.models.currency.Currency
 import com.example.currency.data.models.currency.CurrencyModel
 import com.example.currency.data.room.DatabaseClass
 import com.example.currency.data.sqlite.DBHelper
-import com.example.currency.databinding.ActivityMain2Binding
 import com.example.currency.databinding.ActivityMainBinding
+
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Retrofit
 import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    lateinit var navController: NavController
     lateinit var activityMainBinding: ActivityMainBinding
+    lateinit var bottomNavigationView: BottomNavigationView
+    lateinit var navController:NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main)
         setContentView(activityMainBinding.root)
-        //homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
-
+        bottomNavigationView = activityMainBinding.bottomNavigationView
+        bottomNavigationView.setupWithNavController(navController)
 
         /*activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setContentView(activityMainBinding.root)

@@ -10,19 +10,23 @@ import com.example.currency.data.models.convert.ConvertModel
 import com.example.currency.data.models.currency.Currency
 import com.example.currency.data.models.currency.CurrencyModel
 import com.example.currency.data.room.DatabaseClass
+import com.example.currency.images.GalleryModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import javax.inject.Named
 
-class CurrencyRepositoryImp(private val api: Api,private val databaseClass: DatabaseClass):CurrencyRepository  {
+class CurrencyRepositoryImp(var currency_api: Api,var gallery_api: Api,private val databaseClass: DatabaseClass):CurrencyRepository  {
 
     var currencyerrorLiveData :MutableLiveData<List<Currency>> = MutableLiveData<List<Currency>>()
     lateinit var currencyobservable :Single<CurrencyModel>
     lateinit var convertcurrencyobservable :Single<ConvertModel>
+    lateinit var galleryobservable :Observable<GalleryModel>
 
     override fun get_currency():Single<CurrencyModel>  {
-        currencyobservable = api.get_currency(Constants.key)
+        currencyobservable = currency_api.get_currency(Constants.key)
         return currencyobservable
         /*compositeDisposable.add(observable.subscribe(
             { o: CurrencyModel? -> currencyMutableLiveData.value = o },
@@ -34,8 +38,13 @@ class CurrencyRepositoryImp(private val api: Api,private val databaseClass: Data
         currencyFromKey: String,
         currencyToKey: String,
         amount: Double): Single<ConvertModel> {
-        convertcurrencyobservable = api.convert(Constants.key,currencyFromKey,currencyToKey,amount)
+        convertcurrencyobservable = currency_api.convert(Constants.key,currencyFromKey,currencyToKey,amount)
         return convertcurrencyobservable;
+    }
+
+    override fun get_gallery(key: String, query: String, page: Int): Observable<GalleryModel> {
+     galleryobservable = gallery_api.get_gallery(key,query,page)
+     return galleryobservable;
     }
 
     fun get_error_data(e: Throwable) {

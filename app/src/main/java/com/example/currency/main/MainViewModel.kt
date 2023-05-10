@@ -84,14 +84,17 @@ class MainViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
         }
     }
     fun convert_currency(currencyFromKey: String, currencyToKey: String, amount: Double) {
-
-            convert_currency_single = currencyRepositoryImp.convert_currency(currencyFromKey, currencyToKey, amount)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            compositeDisposable.add(convert_currency_single.subscribe(
+        if (connect_network) {
+            convert_currency_single =
+                currencyRepositoryImp.convert_currency(currencyFromKey, currencyToKey, amount)
+                    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            compositeDisposable.add(
+                convert_currency_single.subscribe(
                     { o: ConvertModel? -> convertcurrencyLiveData.value = o },
                     { e: Throwable -> Log.d("convert_error", "$e") })
             )
         }
+    }
 
     fun addCurrency(from: String, to: String, rate: String, amount: String, result: String, date: String) {
         dbHelper.addCurrency(from,to,rate,amount,result,date)

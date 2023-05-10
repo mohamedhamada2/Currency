@@ -2,6 +2,7 @@ package com.example.currency.dagger
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.widget.Gallery
 import android.widget.Toast
 import androidx.room.Room
 import com.example.currency.R
@@ -27,6 +28,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ApiModulee {
     var BASE_URL = Constants.url
+    var Gallery_URL = Constants.gallery_url
 
     @Singleton
     @Provides
@@ -46,16 +48,31 @@ object ApiModulee {
 
     @Singleton
     @Provides
+    @Named("currency")
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .baseUrl(BASE_URL)
         .client(okHttpClient)
         .build()
+    @Singleton
+    @Provides
+    @Named("gallery")
+    fun provideGalleryRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+        .baseUrl(Gallery_URL)
+        .client(okHttpClient)
+        .build()
+    @Singleton
+    @Provides
+    @Named("currency_api")
+    fun provideApiService(@Named("currency") retrofit: Retrofit): Api = retrofit.create(Api::class.java)
 
     @Singleton
     @Provides
-    fun provideApiService(retrofit: Retrofit): Api = retrofit.create(Api::class.java)
+    @Named("gallery_api")
+    fun providegalleryApiService(@Named("gallery") retrofit: Retrofit): Api = retrofit.create(Api::class.java)
     @Singleton
     @Provides
     @Named("network_connection")
@@ -75,6 +92,6 @@ object ApiModulee {
 
     @Singleton
     @Provides
-    fun providesRepository(api: Api,databaseClass: DatabaseClass) = CurrencyRepositoryImp(api,databaseClass)
+    fun providesRepository(@Named("currency_api")currency_api: Api,@Named("gallery_api")gallery_api: Api,databaseClass: DatabaseClass) = CurrencyRepositoryImp(currency_api,gallery_api,databaseClass)
 
 }
