@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/homeFragment"
         android:title="الرئيسية"
-        android:icon="@drawable/ic_home"/>
+        android:icon="@drawable/money_exchange"/>
     <item android:id="@+id/detailsFragment"
         android:title="الشروط والاحكام"
-        android:icon="@drawable/security_safe"/>
+        android:icon="@drawable/database"/>
     <item android:id="@+id/imagesFragment"
         android:title="عن التطبيق"
-        android:icon="@drawable/about"/>
+        android:icon="@drawable/gallery"/>
     <item android:id="@+id/pofileFragment"
         android:title="الملف الشخصي"
-        android:icon="@drawable/ic_user_square"/>
+        android:icon="@drawable/user"/>
 
 </menu>

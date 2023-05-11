@@ -13,6 +13,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/nav_menu"
+            android:background="@color/white"
             android:theme="@style/Widget.BottomNavigationView"
             app:labelVisibilityMode="unlabeled"
             app:itemBackground="@drawable/selector_checked_uncheked"
@@ -29,7 +30,8 @@
             app:layout_constraintBottom_toBottomOf="@id/bottomNavigationView"
             app:defaultNavHost="true"
             android:layout_marginBottom="60dp"
-            app:navGraph="@navigation/currency_nav" />
+            app:navGraph="@navigation/currency_nav"
+            android:background="#f0f0f0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

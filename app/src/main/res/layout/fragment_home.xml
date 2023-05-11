@@ -3,7 +3,7 @@
     <data>
         <variable
             name="mainviewmodel"
-            type="com.example.currency.main.MainViewModel" />
+            type="com.example.currency.viewmodel.home.HomeViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,7 +11,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".main.HomeFragment"
+        tools:context=".view.home.HomeFragment"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintVertical_bias="0.5">
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -108,14 +108,14 @@
                     android:layout_width="0dp"
                     android:layout_height="56dp"
                     android:background="@drawable/btn_login_background"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:layout_weight="2"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:layout_marginTop="48dp"
                     android:fontFamily="@font/cairo_bold"
                     android:onClick="Confirm"
-                    android:text="detail"
+                    android:text="التحويلات "
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp" />
             </LinearLayout>

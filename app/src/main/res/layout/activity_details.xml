@@ -3,7 +3,7 @@
     <data>
         <variable
             name="detailsviewmodel"
-            type="com.example.currency.details.DetailsViewModel" />
+            type="com.example.currency.viewmodel.details.DetailsViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

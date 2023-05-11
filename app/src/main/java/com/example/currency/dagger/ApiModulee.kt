@@ -2,14 +2,13 @@ package com.example.currency.dagger
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.widget.Gallery
 import android.widget.Toast
-import androidx.room.Room
 import com.example.currency.R
-import com.example.currency.api.Api
+import com.example.currency.data.api.Api
 import com.example.currency.constants.Constants
 import com.example.currency.data.room.DatabaseClass
-import com.example.currency.main.CurrencyRepositoryImp
+import com.example.currency.data.models.currency.CurrencyRepositoryImp
+import com.example.currency.data.models.gallery.GalleryRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -92,6 +91,10 @@ object ApiModulee {
 
     @Singleton
     @Provides
-    fun providesRepository(@Named("currency_api")currency_api: Api,@Named("gallery_api")gallery_api: Api,databaseClass: DatabaseClass) = CurrencyRepositoryImp(currency_api,gallery_api,databaseClass)
+    fun providesCurrencyRepository(@Named("currency_api")currency_api: Api) = CurrencyRepositoryImp(currency_api)
+
+    @Singleton
+    @Provides
+    fun providesgalleryRepository(@Named("gallery_api")gallery_api: Api) = GalleryRepositoryImp(gallery_api)
 
 }
