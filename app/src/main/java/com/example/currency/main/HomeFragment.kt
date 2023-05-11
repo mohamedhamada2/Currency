@@ -1,5 +1,4 @@
 package com.example.currency.main
-
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -124,7 +123,7 @@ class HomeFragment : Fragment() {
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
-                view: View,
+                view: View?,
                 position: Int,
                 id: Long) {
                 currency_from_key = currencylist[position].key
@@ -142,7 +141,7 @@ class HomeFragment : Fragment() {
         fragmentHomeBinding.toSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
-                view: View,
+                view: View?,
                 position: Int,
                 id: Long) {
                 currency_to_key = currencylist[position].key

@@ -43,7 +43,7 @@ object ApiModulee {
         OkHttpClient
             .Builder()
             .addInterceptor(httpLoggingInterceptor)
-            .connectTimeout(10, TimeUnit.SECONDS)
+            .connectTimeout(30, TimeUnit.SECONDS)
             .build()
 
     @Singleton

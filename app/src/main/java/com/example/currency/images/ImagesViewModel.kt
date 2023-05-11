@@ -1,5 +1,6 @@
 package com.example.currency.images
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,71 +10,84 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
+
 @HiltViewModel
 class ImagesViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepositoryImp,@Named("network_connection")var connect_network:Boolean):ViewModel() {
-    var galleryMutableLiveData: MutableLiveData<GalleryModel> = MutableLiveData<GalleryModel>()
     var galleryadapterLiveData: MutableLiveData<ImagesAdapter> = MutableLiveData<ImagesAdapter>()
     var loading: MutableLiveData<Int> = MutableLiveData<Int>()
     lateinit var imagesAdapter: ImagesAdapter
-    lateinit var observable: Observable<GalleryModel>
+
+    private var observable: Observable<GalleryModel> = BehaviorSubject.create()
 
 
+    @SuppressLint("CheckResult")
     fun search_in_gallery(search: String, page: Int) {
-        observable = currencyRepositoryImp.get_gallery(Constants.gallery_key, search, page)
+        if (connect_network){
+            observable.debounce(3,TimeUnit.SECONDS)
+            observable = currencyRepositoryImp.get_gallery(Constants.gallery_key, search, page)
                 .subscribeOn(Schedulers.io())
-                .debounce(4, TimeUnit.SECONDS)
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
 
-        observable.subscribe(
-            { o: GalleryModel? ->
-                if (o != null) {
-                    if (!o.photos.isEmpty()) {
-                        imagesAdapter = ImagesAdapter(o.photos as ArrayList<Photo>)
-                        galleryadapterLiveData.value = imagesAdapter
-                        loading.value = 1
+            observable.subscribe(
+                { o: GalleryModel? ->
+                    if (o != null) {
+                        if (!o.photos.isEmpty()) {
+                            setAdapter(o)
 
-                    } else {
-                        imagesAdapter = ImagesAdapter(o.photos as ArrayList<Photo>)
-                        loading.value = 0
+                            loading.value = 1
+
+                        } else {
+                            setAdapter(o)
+                            imagesAdapter = ImagesAdapter(o.photos as ArrayList<Photo>)
+                            loading.value = 0
+
+                        }
+
+                        //homeFragment.setRecyclerView(imagesAdapter)
+                        //load_more_search_in_gallery()
+                        //imagesAdapter.addLoadingFooter(o.photos);
 
                     }
+                },
+                { e: Throwable -> Log.e("rrrr", e.message.toString()) })
+        }
 
-                    //homeFragment.setRecyclerView(imagesAdapter)
-                    //load_more_search_in_gallery()
-                    //imagesAdapter.addLoadingFooter(o.photos);
+    }
 
-                }
-            },
-            { e: Throwable -> Log.e("rrrr", e.message.toString()) })
+    private fun setAdapter(o: GalleryModel) {
+        imagesAdapter = ImagesAdapter(o.photos as ArrayList<Photo>)
+        galleryadapterLiveData.value = imagesAdapter
     }
 
     fun load_more_search_in_gallery(search: String, page: Int) {
-        observable =
-            currencyRepositoryImp.get_gallery(Constants.key, search, page)
+        if (connect_network){
+            observable = currencyRepositoryImp.get_gallery(Constants.key, search, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 
-        observable.subscribe(
-            { o: GalleryModel? ->
-                if (o != null) {
-                    if (!o.photos.isEmpty()) {
-                        //Toast.makeText(mainActivity,currentPage.toString(),Toast.LENGTH_LONG).show()
-                        //galleryMutableLiveData.value = o
-                        imagesAdapter.add_photo(o.photos);
-                        loading.value = 1
-                        //galleryadapterLiveData.value = imagesAdapter
-                        //imagesAdapter.addLoadingFooter(o.photos);
-                    } else {
-                        loading.value = 0
-                    }
+            observable.subscribe(
+                { o: GalleryModel? ->
+                    if (o != null) {
+                        if (!o.photos.isEmpty()) {
+                            //Toast.makeText(mainActivity,currentPage.toString(),Toast.LENGTH_LONG).show()
+                            //galleryMutableLiveData.value = o
+                            imagesAdapter.add_photo(o.photos);
+                            loading.value = 1
+                            //galleryadapterLiveData.value = imagesAdapter
+                            //imagesAdapter.addLoadingFooter(o.photos);
+                        } else {
+                            loading.value = 0
+                        }
 
-                }
-            },
-            { e: Throwable -> Log.e("rrrr", e.message.toString()) })
+                    }
+                },
+                { e: Throwable -> Log.e("rrrr", e.message.toString()) })
+        }
     }
 }
 
