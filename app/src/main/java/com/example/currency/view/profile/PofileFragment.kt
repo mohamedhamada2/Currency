@@ -27,9 +27,9 @@ class PofileFragment : Fragment() {
         //userSharedPreferance = UserSharedPreferance().getInstance()!!
         fragmentPofileBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_pofile,container,false)
         fragmentPofileBinding.profileviewmodel = profileViewModel
-        profileViewModel.userdata_MutableLiveData.observe(viewLifecycleOwner,{
+        profileViewModel.userdata_MutableLiveData.observe(viewLifecycleOwner) {
             setData(it)
-        })
+        }
         return fragmentPofileBinding.root
     }
 
