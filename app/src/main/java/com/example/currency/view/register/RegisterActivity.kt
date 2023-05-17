@@ -11,23 +11,23 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.currency.R
+import com.example.currency.data.language.LocaleHelper
 import com.example.currency.data.models.user.UserModel
 import com.example.currency.data.models.user.UserSharedPreferance
 import com.example.currency.databinding.ActivityRegisterBinding
 import com.example.currency.view.main.MainActivity
 import com.example.currency.viewmodel.register.RegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
     lateinit var activityRegisterBinding: ActivityRegisterBinding
-    private val registerViewModel: RegisterViewModel by viewModels()
+    private  val registerViewModel: RegisterViewModel by viewModels()
     lateinit var name:String
     lateinit var email:String
     lateinit var password:String
     lateinit var phone:String
-    //lateinit var userSharedPreferance: UserSharedPreferance
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityRegisterBinding = DataBindingUtil.setContentView(this,R.layout.activity_register)
@@ -39,7 +39,26 @@ class RegisterActivity : AppCompatActivity() {
         registerViewModel.success_save_MutableLiveData.observe(this, Observer {
             success_save(it)
         })
+        registerViewModel.languageMutableLiveData.observe(this){
+            init_language(it)
+        }
 
+    }
+
+    private fun init_language(language: String?) {
+        Toast.makeText(this,language,Toast.LENGTH_LONG).show()
+        updateview(language!!)
+    }
+
+    private fun updateview(language: String) {
+        val context = LocaleHelper.setLocale(this, language);
+        val resources = context?.resources
+        activityRegisterBinding.etName.hint = resources!!.getString(R.string.name)
+        activityRegisterBinding.etEmail.hint = resources.getString(R.string.user_email)
+        activityRegisterBinding.etPhone.hint = resources.getString(R.string.phone)
+        activityRegisterBinding.etPassword.hint = resources.getString(R.string.user_password)
+        activityRegisterBinding.btnRegister.text = resources.getString(R.string.sign_up)
+        activityRegisterBinding.txtSignUp.text = resources.getString(R.string.sign_up)
     }
 
     private fun success_save(it: Boolean?) {

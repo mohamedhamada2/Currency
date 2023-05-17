@@ -9,13 +9,22 @@ import com.example.currency.data.models.user.UserSharedPreferance
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import javax.inject.Named
+
 @HiltViewModel
-class ProfileViewModel @Inject constructor(var userRepositoryImp: UserRepositoryImp): ViewModel() {
+class ProfileViewModel @Inject constructor(var userRepositoryImp: UserRepositoryImp,@Named("language")var language:String): ViewModel() {
     var userdata_MutableLiveData: MutableLiveData<UserModel> = MutableLiveData<UserModel>()
+    var languageMutableLiveData: MutableLiveData<String> = MutableLiveData<String>()
     init {
-        get_data()
+        get_user_data()
+        get_language()
     }
-    fun get_data(){
+
+    private fun get_language() {
+        languageMutableLiveData.value = language
+    }
+
+    fun get_user_data(){
         val  userModel = userRepositoryImp.get_user_data()
         userdata_MutableLiveData.value = userModel
     }

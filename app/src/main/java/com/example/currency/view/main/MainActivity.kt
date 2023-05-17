@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -22,15 +23,19 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.currency.R
 import com.example.currency.data.api.Api
 import com.example.currency.dagger.MyApplication
+import com.example.currency.data.language.LocaleHelper
 import com.example.currency.data.models.currency.Currency
 import com.example.currency.data.models.currency.CurrencyModel
 import com.example.currency.data.room.DatabaseClass
 import com.example.currency.data.sqlite.DBHelper
 import com.example.currency.databinding.ActivityMainBinding
+import com.example.currency.viewmodel.main.MainViewModel
 
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.scopes.ActivityScoped
+import io.paperdb.Paper
 import retrofit2.Retrofit
 import javax.inject.Inject
 @AndroidEntryPoint
@@ -39,10 +44,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var activityMainBinding: ActivityMainBinding
     lateinit var bottomNavigationView: BottomNavigationView
     lateinit var navController:NavController
+    lateinit var mainViewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main)
         setContentView(activityMainBinding.root)
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        mainViewModel.languageMutableLiveData.observe(this){
+            init_language(it)
+        }
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
@@ -146,6 +156,25 @@ class MainActivity : AppCompatActivity() {
             activityMainBinding.etOutput.setText(it.result.toString())
             mainViewModel1.addCurrency(it.query.from,it.query.to,it.info.rate.toString(),it.query.amount.toString(),it.result.toString(),it.date)
         })*/
+
+    }
+
+    private fun init_language(language: String?) {
+        Toast.makeText(this,language,Toast.LENGTH_LONG).show()
+        updateview(language!!)
+        /*if(language == null){
+            Paper.book().write("language","en");
+        }
+        updateview(language!!)*/
+    }
+
+    private fun updateview(language: String) {
+        val context = LocaleHelper.setLocale(this, language);
+        val resources = context?.resources
+        activityMainBinding.bottomNavigationView.menu.getItem(0).title = resources!!.getString(R.string.home);
+        activityMainBinding.bottomNavigationView.menu.getItem(1).title = resources.getString(R.string.exchanges);
+        activityMainBinding.bottomNavigationView.menu.getItem(2).title = resources.getString(R.string.alboum);
+        activityMainBinding.bottomNavigationView.menu.getItem(3).title = resources.getString(R.string.profile);
 
     }
 

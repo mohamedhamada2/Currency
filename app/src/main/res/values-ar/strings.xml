@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sign_up">إنشاء حساب جديد</string>
+    <string name="name">إسم المستخدم</string>
+    <string name="phone">رقم الهاتف</string>
+    <string name="user_password">كلمة المرور</string>
+    <string name="user_email">البريد الإلكتروني</string>
+    <string name="home">الرئيسية</string>
+    <string name="exchanges">التحويلات</string>
+    <string name="alboum">ألبوم الصور</string>
+    <string name="profile">الملف الشخصي</string>
+    <string name="edit_profile">تعديل الملف الشخصي</string>
+    <string name="select_lang">اختر اللغة</string>
+    <string name="search">ابحث</string>
+    <string name="amount">الكمية</string>
+    <string name="date">التاريخ</string>
+    <string name="from">من </string>
+    <string name="to">إلي </string>
+    <string name="total">الإجمالي</string>
+    <string name="base">العملة الرئيسية</string>
+</resources>

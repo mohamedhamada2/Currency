@@ -20,7 +20,11 @@
         android:id="@+id/pofileFragment"
         android:name="com.example.currency.view.profile.PofileFragment"
         android:label="fragment_pofile"
-        tools:layout="@layout/fragment_pofile" />
+        tools:layout="@layout/fragment_pofile" >
+        <action
+            android:id="@+id/action_pofileFragment_self"
+            app:destination="@id/pofileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/imagesFragment"
         android:name="com.example.currency.view.gallery.ImagesFragment"

@@ -5,7 +5,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class UserRepositoryImp @Inject constructor(var userSharedPreferance: UserSharedPreferance,var context: Context) : UserRepository{
-     var save_date:Boolean = false
+    var save_date:Boolean = false
     override fun update_user_data(
         name: String,
         phone: String,
@@ -22,6 +22,7 @@ class UserRepositoryImp @Inject constructor(var userSharedPreferance: UserShared
         val userModel = userSharedPreferance.Get_UserData(context)
         return userModel!!
     }
+
 
 
 }

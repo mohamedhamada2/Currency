@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.currency.R
+import com.example.currency.data.language.LocaleHelper
 import com.example.currency.databinding.FragmentImagesBinding
 import com.example.currency.viewmodel.gallery.ImagesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -104,6 +105,9 @@ class ImagesFragment : Fragment() {
         imagesViewModel.galleryadapterLiveData.observe(viewLifecycleOwner, Observer {
             setRecyclerView(it)
         })
+        imagesViewModel.languageMutableLiveData.observe(viewLifecycleOwner, Observer {
+            init_language(it)
+        })
         imagesViewModel.loading.observe(viewLifecycleOwner, Observer {
             if (it == 1){
                 fragmentImagesBinding.progressBar.visibility= View.VISIBLE
@@ -113,6 +117,13 @@ class ImagesFragment : Fragment() {
         })
 
         return view
+    }
+
+    private fun init_language(language: String) {
+        val context = LocaleHelper.setLocale(requireContext(), language);
+        val resources = context?.resources
+        fragmentImagesBinding.txtAlboum.text = resources!!.getString(R.string.alboum)
+        fragmentImagesBinding.etSearch.hint = resources.getString(R.string.search)
     }
 
     private fun setRecyclerView(imagesAdapter: ImagesAdapter?) {

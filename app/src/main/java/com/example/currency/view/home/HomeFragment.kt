@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.currency.R
+import com.example.currency.data.language.LocaleHelper
 import com.example.currency.data.models.currency.Currency
 import com.example.currency.databinding.FragmentHomeBinding
 import com.example.currency.viewmodel.home.HomeViewModel
@@ -56,11 +57,20 @@ class HomeFragment : Fragment() {
             set_currenct_base(it)
         })*/
 
-        homeViewModel1.convertcurrencyLiveData.observe(viewLifecycleOwner, Observer {
+        homeViewModel1.convertcurrencyLiveData.observe(viewLifecycleOwner)  {
             fragmentHomeBinding.etOutput.setText(it.result.toString())
             homeViewModel1.addCurrency(it.query.from,it.query.to,it.info.rate.toString(),it.query.amount.toString(),it.result.toString(),it.date)
-        })
+        }
+        homeViewModel1.languageMutableLiveData.observe(viewLifecycleOwner){
+            init_language(it)
+        }
         return view
+    }
+
+    private fun init_language(language: String) {
+        val context = LocaleHelper.setLocale(requireContext(), language);
+        val resources = context?.resources
+        fragmentHomeBinding.detail.text = resources!!.getString(R.string.exchanges)
     }
 
     private fun init() {

@@ -19,13 +19,19 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
-class ImagesViewModel @Inject constructor(var galleryRepositoryImp: GalleryRepositoryImp, @Named("network_connection")var connect_network:Boolean):ViewModel() {
+class ImagesViewModel @Inject constructor(var galleryRepositoryImp: GalleryRepositoryImp, @Named("network_connection")var connect_network:Boolean,@Named("language")var language:String):ViewModel() {
     var galleryadapterLiveData: MutableLiveData<ImagesAdapter> = MutableLiveData<ImagesAdapter>()
     var loading: MutableLiveData<Int> = MutableLiveData<Int>()
     lateinit var imagesAdapter: ImagesAdapter
-
     private var observable: Observable<GalleryModel> = BehaviorSubject.create()
+    var languageMutableLiveData :MutableLiveData<String> = MutableLiveData()
+    init {
+        get_language(language)
+    }
 
+    private fun get_language(language: String) {
+        languageMutableLiveData.value = language
+    }
 
     @SuppressLint("CheckResult")
     fun search_in_gallery(search: String, page: Int) {

@@ -21,12 +21,14 @@ import javax.inject.Named
 class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepositoryImp,
                                         var databaseClass:DatabaseClass,
                                         var dbHelper: DBHelper,
-                                        @Named("network_connection")var connect_network:Boolean) : ViewModel() {
+                                        @Named("network_connection")var connect_network:Boolean,
+                                        @Named("language")var language: String) : ViewModel() {
 
     var currencyMutableLiveData: MutableLiveData<CurrencyModel?> = MutableLiveData<CurrencyModel?>()
     var convertcurrencyLiveData: MutableLiveData<ConvertModel> = MutableLiveData<ConvertModel>()
     var currencyLiveData :MutableLiveData<ArrayList<Currency>> = MutableLiveData<ArrayList<Currency>>()
     var currencyvalueMutableLiveData: MutableLiveData< ArrayList<String>> = MutableLiveData<ArrayList<String>>()
+    var languageMutableLiveData :MutableLiveData<String> = MutableLiveData()
     lateinit var currency_single :Single<CurrencyModel>
     lateinit var convert_currency_single: Single<ConvertModel>
     var compositeDisposable:CompositeDisposable = CompositeDisposable()
@@ -34,6 +36,11 @@ class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
     var  currencyvaluelist : ArrayList<String> = ArrayList()
     init {
         get_currency()
+        get_language(language)
+    }
+
+    private fun get_language(language: String) {
+        languageMutableLiveData.value = language
     }
 
     fun get_currency() {

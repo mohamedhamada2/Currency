@@ -1,5 +1,6 @@
 package com.example.currency.data.models.user
 
+import android.content.Context
 import android.provider.ContactsContract.DisplayPhoto
 
 interface UserRepository {
