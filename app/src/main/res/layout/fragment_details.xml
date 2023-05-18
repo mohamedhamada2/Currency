@@ -27,7 +27,7 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:fontFamily="@font/cairo_bold"
-                android:text="التحويلات"
+                android:text="@string/exchanges"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

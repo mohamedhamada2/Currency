@@ -18,13 +18,11 @@ import com.example.currency.databinding.CurrencyItemBinding
 import javax.inject.Inject
 import javax.inject.Named
 
-class DetailsAdapter (private val mList: List<CurrencyExchange?>,var language:String) : RecyclerView.Adapter<DetailsAdapter.ViewHolder>() {
-    var  context: Context? = null
+class DetailsAdapter (private val mList: List<CurrencyExchange?>) : RecyclerView.Adapter<DetailsAdapter.ViewHolder>() {
     lateinit var resources :Resources
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        context = LocaleHelper.setLocale(parent.context, language)
-        resources = context?.resources!!
+
         // inflates the card_view_design view
         // that is used to hold list item
         val binding = CurrencyItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

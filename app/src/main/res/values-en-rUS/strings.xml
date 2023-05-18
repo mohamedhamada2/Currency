@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Currency</string>
-    <string name="checkNetworkConnection">تأكد من الإتصال بالإنترنت</string>
+    <string name="checkNetworkConnection">Check Internet Connection</string>
     <string name="sign_up">Sign up</string>
     <string name="name">UserName</string>
     <string name="phone">UserPhone</string>

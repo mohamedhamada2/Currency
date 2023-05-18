@@ -1,5 +1,6 @@
 package com.example.currency.view.register
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -28,6 +29,7 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var email:String
     lateinit var password:String
     lateinit var phone:String
+    lateinit var language:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityRegisterBinding = DataBindingUtil.setContentView(this,R.layout.activity_register)
@@ -39,27 +41,13 @@ class RegisterActivity : AppCompatActivity() {
         registerViewModel.success_save_MutableLiveData.observe(this, Observer {
             success_save(it)
         })
-        registerViewModel.languageMutableLiveData.observe(this){
+        LoadLocal()
+        /*registerViewModel.languageMutableLiveData.observe(this){
             init_language(it)
-        }
+        }*/
 
     }
 
-    private fun init_language(language: String?) {
-        Toast.makeText(this,language,Toast.LENGTH_LONG).show()
-        updateview(language!!)
-    }
-
-    private fun updateview(language: String) {
-        val context = LocaleHelper.setLocale(this, language);
-        val resources = context?.resources
-        activityRegisterBinding.etName.hint = resources!!.getString(R.string.name)
-        activityRegisterBinding.etEmail.hint = resources.getString(R.string.user_email)
-        activityRegisterBinding.etPhone.hint = resources.getString(R.string.phone)
-        activityRegisterBinding.etPassword.hint = resources.getString(R.string.user_password)
-        activityRegisterBinding.btnRegister.text = resources.getString(R.string.sign_up)
-        activityRegisterBinding.txtSignUp.text = resources.getString(R.string.sign_up)
-    }
 
     private fun success_save(it: Boolean?) {
         if (it == true){
@@ -103,12 +91,15 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
     }
-
-    fun setData(success_save:Boolean) {
-        if (success_save){
-            Toast.makeText(this,"تم تسجيلك بنجاح",Toast.LENGTH_LONG).show()
-            val intent = Intent(this,MainActivity::class.java)
-            startActivity(intent)
-        }
+    private fun LoadLocal() {
+        val sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
+        language = sharedPreferences.getString("language","")!!
+        LocaleHelper.setLocale(this, language)
+        activityRegisterBinding.txtSignUp.text = getString(R.string.sign_up);
+        activityRegisterBinding.etEmail.hint = getString(R.string.user_email);
+        activityRegisterBinding.etName.hint = getString(R.string.name);
+        activityRegisterBinding.etPhone.hint = getString(R.string.phone);
+        activityRegisterBinding.etPassword.hint = getString(R.string.user_password);
+        activityRegisterBinding.btnRegister.text = getString(R.string.sign_up);
     }
 }

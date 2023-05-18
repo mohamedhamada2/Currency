@@ -12,17 +12,17 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(var userRepositoryImp: UserRepositoryImp,@Named("language")var language:String): ViewModel() {
+class ProfileViewModel @Inject constructor(var userRepositoryImp: UserRepositoryImp): ViewModel() {
     var userdata_MutableLiveData: MutableLiveData<UserModel> = MutableLiveData<UserModel>()
     var languageMutableLiveData: MutableLiveData<String> = MutableLiveData<String>()
     init {
         get_user_data()
-        get_language()
+        //get_language()
     }
 
-    private fun get_language() {
+    /*private fun get_language() {
         languageMutableLiveData.value = language
-    }
+    }*/
 
     fun get_user_data(){
         val  userModel = userRepositoryImp.get_user_data()

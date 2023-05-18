@@ -1,5 +1,7 @@
 package com.example.currency.view.details
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +17,7 @@ import com.example.currency.data.room.CurrencyExchange
 import com.example.currency.databinding.FragmentDetailsBinding
 import com.example.currency.viewmodel.details.DetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
@@ -31,12 +34,13 @@ class DetailsFragment : Fragment() {
         fragmentDetailsBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_details, container, false)
         fragmentDetailsBinding.detailsviewmodel = detailsViewModel1
-
+        LoadLocal()
         detailsViewModel1.languageMutableLiveData.observe(viewLifecycleOwner){
-            init_language(it)
+            //init_language(it)
             detailsViewModel1.currencyMutableLiveData.observe(viewLifecycleOwner, Observer {
             setlist(it)
             })
+
         }
         /*fragmentDetailsBinding.backImg.setOnClickListener {
             findNavController().navigate(R.id.action_detailsFragment_to_homeFragment)
@@ -45,17 +49,16 @@ class DetailsFragment : Fragment() {
         return fragmentDetailsBinding.root
     }
 
-    private fun init_language(language: String) {
-        this.language = language
-        val context = LocaleHelper.setLocale(requireContext(), language);
-        val resources = context?.resources
-        fragmentDetailsBinding.txtExchanges.text = resources!!.getString(R.string.exchanges)
-    }
-
     private fun setlist(currencyExchanges: List<CurrencyExchange?>) {
-        detailsAdapter = DetailsAdapter(currencyExchanges,language)
+        detailsAdapter = DetailsAdapter(currencyExchanges)
         layout_manager = LinearLayoutManager(requireContext())
         fragmentDetailsBinding.detailsRecycler.adapter = detailsAdapter
         fragmentDetailsBinding.detailsRecycler.layoutManager = layout_manager;
+    }
+    private fun LoadLocal() {
+        val sharedPreferences = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE)
+        language = sharedPreferences.getString("language","")!!
+        LocaleHelper.setLocale(requireContext(),language)
+        fragmentDetailsBinding.txtExchanges.text = getString(R.string.exchanges)
     }
 }

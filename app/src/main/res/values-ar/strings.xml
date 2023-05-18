@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Currency</string>
+    <string name="checkNetworkConnection">تأكد من الإتصال بالإنترنت</string>
     <string name="sign_up">إنشاء حساب جديد</string>
     <string name="name">إسم المستخدم</string>
     <string name="phone">رقم الهاتف</string>

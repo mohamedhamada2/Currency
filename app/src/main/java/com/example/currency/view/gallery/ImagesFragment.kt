@@ -1,5 +1,7 @@
 package com.example.currency.view.gallery
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,6 +20,7 @@ import com.example.currency.data.language.LocaleHelper
 import com.example.currency.databinding.FragmentImagesBinding
 import com.example.currency.viewmodel.gallery.ImagesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class ImagesFragment : Fragment() {
@@ -32,6 +35,7 @@ class ImagesFragment : Fragment() {
     private  var previous_total = 0
     var view_threshold  = 15
     var page = 1
+    lateinit var language: String
     private val imagesViewModel: ImagesViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +48,7 @@ class ImagesFragment : Fragment() {
         //homeViewModel = HomeViewModel(requireContext(),this)
         //(activity?.application as MyApplication).getAppComponent()!!.inject(this)
         layoutManager = GridLayoutManager(activity,2)
+        LoadLocal()
 
         /*fragmentHomeBinding.etSearch.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -105,9 +110,6 @@ class ImagesFragment : Fragment() {
         imagesViewModel.galleryadapterLiveData.observe(viewLifecycleOwner, Observer {
             setRecyclerView(it)
         })
-        imagesViewModel.languageMutableLiveData.observe(viewLifecycleOwner, Observer {
-            init_language(it)
-        })
         imagesViewModel.loading.observe(viewLifecycleOwner, Observer {
             if (it == 1){
                 fragmentImagesBinding.progressBar.visibility= View.VISIBLE
@@ -119,17 +121,27 @@ class ImagesFragment : Fragment() {
         return view
     }
 
-    private fun init_language(language: String) {
-        val context = LocaleHelper.setLocale(requireContext(), language);
-        val resources = context?.resources
-        fragmentImagesBinding.txtAlboum.text = resources!!.getString(R.string.alboum)
-        fragmentImagesBinding.etSearch.hint = resources.getString(R.string.search)
-    }
 
     private fun setRecyclerView(imagesAdapter: ImagesAdapter?) {
         fragmentImagesBinding.imagesRecycler.setHasFixedSize(true)
         fragmentImagesBinding.imagesRecycler.layoutManager = layoutManager
         fragmentImagesBinding.imagesRecycler.adapter = imagesAdapter
+    }
+    private fun LoadLocal() {
+        val sharedPreferences = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE)
+        language = sharedPreferences.getString("language","")!!
+        LocaleHelper.setLocale(requireContext(),language)
+        fragmentImagesBinding.etSearch.hint = getString(R.string.search)
+        fragmentImagesBinding.txtAlboum.hint = getString(R.string.alboum)
+    }
+
+    private fun setLocal(language: String) {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config: Configuration = requireActivity().baseContext.resources.configuration
+        config.locale = locale
+        requireActivity().baseContext.resources.updateConfiguration(
+            config,requireActivity().baseContext.resources.displayMetrics)
     }
 
 }

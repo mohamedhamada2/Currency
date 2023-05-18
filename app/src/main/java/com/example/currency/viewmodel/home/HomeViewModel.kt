@@ -19,15 +19,13 @@ import javax.inject.Named
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepositoryImp,
-                                        var databaseClass:DatabaseClass,
-                                        var dbHelper: DBHelper,
-                                        @Named("network_connection")var connect_network:Boolean,
-                                        @Named("language")var language: String) : ViewModel() {
+                                        @Named("network_connection")var connect_network:Boolean) : ViewModel() {
 
     var currencyMutableLiveData: MutableLiveData<CurrencyModel?> = MutableLiveData<CurrencyModel?>()
     var convertcurrencyLiveData: MutableLiveData<ConvertModel> = MutableLiveData<ConvertModel>()
     var currencyLiveData :MutableLiveData<ArrayList<Currency>> = MutableLiveData<ArrayList<Currency>>()
     var currencyvalueMutableLiveData: MutableLiveData< ArrayList<String>> = MutableLiveData<ArrayList<String>>()
+    var errorMutableLiveData :MutableLiveData<String> = MutableLiveData<String>()
     var languageMutableLiveData :MutableLiveData<String> = MutableLiveData()
     lateinit var currency_single :Single<CurrencyModel>
     lateinit var convert_currency_single: Single<ConvertModel>
@@ -36,7 +34,7 @@ class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
     var  currencyvaluelist : ArrayList<String> = ArrayList()
     init {
         get_currency()
-        get_language(language)
+        //get_language(language)
     }
 
     private fun get_language(language: String) {
@@ -55,17 +53,19 @@ class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
     }
 
     private fun get_currency_from_local_db() {
-        currencylist = databaseClass.dao?.get_all_currency_symbols() as ArrayList<Currency>
+        currencylist = currencyRepositoryImp.get_currency_list_from_local_db()
+        currencyvaluelist = currencyRepositoryImp.get_currency_value_list_from_local_db()
+        /*currencylist = databaseClass.dao?.get_all_currency_symbols() as ArrayList<Currency>
         for (currency in currencylist) {
             currencyvaluelist.add(currency.key)
             //currencybasevaluelist.add(currency.key)
-        }
+        }*/
         currencyLiveData.value = currencylist
         currencyvalueMutableLiveData.value = currencyvaluelist
     }
 
     private fun get_error_data(e: Throwable) {
-        Log.d("errormmm", "$e")
+        errorMutableLiveData.value = e.message
 
     }
 
@@ -74,22 +74,27 @@ class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
         compositeDisposable.clear()
     }
 
-    private fun setCurrencyData(
-        currencymodel: CurrencyModel?) {
-        for (keys in currencymodel?.symbols!!.keys) {
-            val value = currencymodel.symbols.getValue(keys)
-            val currency = Currency(keys, value)
-            //databaseClass?.dao?.AddCurrencySymbols(currency)
-            currencylist.add(currency)
-            databaseClass.dao?.AddCurrencySymbols(currency)
-            currencyMutableLiveData.value = currencymodel
-            for (currency in currencylist) {
-                currencyvaluelist.add(currency.key)
+    private fun setCurrencyData(currencymodel: CurrencyModel?) {
+        currencylist = currencyRepositoryImp.get_currency_list_from_api(currencymodel)
+        currencyvaluelist = currencyRepositoryImp.get_currency_value_list_from_api()
+        currencyLiveData.value = currencylist
+        currencyvalueMutableLiveData.value = currencyvaluelist
+        /*currencymodel?.symbols?.keys.let{ keys ->
+            for (key in keys!!) {
+                var value = currencymodel?.symbols?.getValue(key)
+                val currency = value?.let { Currency(key, it) }
+                //databaseClass?.dao?.AddCurrencySymbols(currency)
+                currency?.let { currencylist.add(it) }
+                databaseClass.dao?.AddCurrencySymbols(currency)
+                currencyMutableLiveData.value = currencymodel
+                for (currency in currencylist) {
+                    currencyvaluelist.add(currency.key)
+                }
+                currencyvalueMutableLiveData.value = currencyvaluelist
+                currencyLiveData.value = currencylist
             }
-            currencyvalueMutableLiveData.value = currencyvaluelist
-            currencyLiveData.value = currencylist
+        }*/
             //homeFragment.setSpinnerAdapter(currencylist,currencyvaluelist)
-        }
     }
     fun convert_currency(currencyFromKey: String, currencyToKey: String, amount: Double) {
         if (connect_network) {
@@ -105,7 +110,8 @@ class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
     }
 
     fun addCurrency(from: String, to: String, rate: String, amount: String, result: String, date: String) {
-        dbHelper.addCurrency(from,to,rate,amount,result,date)
+        //dbHelper.addCurrency(from,to,rate,amount,result,date)
+        currencyRepositoryImp.save_currency_converter(from,to,rate,amount,result,date)
     }
     /*fun addCurrency(from: String, to: String, rate: String, amount: String, result: String, date: String) {
         dbHelper.addCurrency(from,to,rate,amount,result,date)

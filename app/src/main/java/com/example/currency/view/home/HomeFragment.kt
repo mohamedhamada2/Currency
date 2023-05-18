@@ -1,4 +1,6 @@
 package com.example.currency.view.home
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,6 +20,8 @@ import com.example.currency.data.models.currency.Currency
 import com.example.currency.databinding.FragmentHomeBinding
 import com.example.currency.viewmodel.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -32,6 +36,7 @@ class HomeFragment : Fragment() {
 
     lateinit var convertfromAdapter: ArrayAdapter<String>
     lateinit var converttoAdapter: ArrayAdapter<String>
+    lateinit var language: String
     private val homeViewModel1: HomeViewModel by viewModels()
 
 
@@ -62,18 +67,19 @@ class HomeFragment : Fragment() {
             homeViewModel1.addCurrency(it.query.from,it.query.to,it.info.rate.toString(),it.query.amount.toString(),it.result.toString(),it.date)
         }
         homeViewModel1.languageMutableLiveData.observe(viewLifecycleOwner){
-            init_language(it)
+            //init_language(it)
         }
         return view
     }
 
     private fun init_language(language: String) {
-        val context = LocaleHelper.setLocale(requireContext(), language);
+        //val context = LocaleHelper.setLocale(requireContext(), language);
         val resources = context?.resources
         fragmentHomeBinding.detail.text = resources!!.getString(R.string.exchanges)
     }
 
     private fun init() {
+        LoadLocal()
         homeViewModel1.currencyLiveData.observe(viewLifecycleOwner) {
             //set_currency(it)
             currencylist = it
@@ -193,5 +199,12 @@ class HomeFragment : Fragment() {
         fragmentHomeBinding.toSpinner.setSelection(spinnerPosition2)
         homeViewModel1.convert_currency(currency_to_key!!,
             currency_from_key!!,fragmentHomeBinding.etInput.text.toString().toDouble())
+    }
+    private fun LoadLocal() {
+        val sharedPreferences = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE)
+        language = sharedPreferences.getString("language","")!!
+        LocaleHelper.setLocale(requireContext(),language)
+        fragmentHomeBinding.detail.text = getString(R.string.exchanges)
+
     }
 }

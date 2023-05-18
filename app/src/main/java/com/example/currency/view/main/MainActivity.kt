@@ -1,6 +1,8 @@
 package com.example.currency.view.main
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -24,6 +26,7 @@ import com.example.currency.R
 import com.example.currency.data.api.Api
 import com.example.currency.dagger.MyApplication
 import com.example.currency.data.language.LocaleHelper
+import com.example.currency.data.language.LocaleHelper.Companion.setLocale
 import com.example.currency.data.models.currency.Currency
 import com.example.currency.data.models.currency.CurrencyModel
 import com.example.currency.data.room.DatabaseClass
@@ -37,6 +40,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.ActivityScoped
 import io.paperdb.Paper
 import retrofit2.Retrofit
+import java.util.*
 import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -45,13 +49,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
     lateinit var navController:NavController
     lateinit var mainViewModel: MainViewModel
+    lateinit var language: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+        LoadLocal()
         setContentView(activityMainBinding.root)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         mainViewModel.languageMutableLiveData.observe(this){
-            init_language(it)
+            //init_language(it)
         }
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.fragmentContainerView) as NavHostFragment
@@ -159,23 +165,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun init_language(language: String?) {
-        Toast.makeText(this,language,Toast.LENGTH_LONG).show()
-        updateview(language!!)
-        /*if(language == null){
-            Paper.book().write("language","en");
-        }
-        updateview(language!!)*/
-    }
-
-    private fun updateview(language: String) {
-        val context = LocaleHelper.setLocale(this, language);
-        val resources = context?.resources
-        activityMainBinding.bottomNavigationView.menu.getItem(0).title = resources!!.getString(R.string.home);
-        activityMainBinding.bottomNavigationView.menu.getItem(1).title = resources.getString(R.string.exchanges);
-        activityMainBinding.bottomNavigationView.menu.getItem(2).title = resources.getString(R.string.alboum);
-        activityMainBinding.bottomNavigationView.menu.getItem(3).title = resources.getString(R.string.profile);
-
+    private fun LoadLocal() {
+        val sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
+        language = sharedPreferences.getString("language","")!!
+        setLocale(this,language)
+        activityMainBinding.bottomNavigationView.menu.getItem(0).title = getString(R.string.home);
+        activityMainBinding.bottomNavigationView.menu.getItem(1).title = getString(R.string.exchanges);
+        activityMainBinding.bottomNavigationView.menu.getItem(2).title = getString(R.string.alboum);
+        activityMainBinding.bottomNavigationView.menu.getItem(3).title = getString(R.string.profile);
     }
 
     /*private fun set_currency_error(currencies: List<Currency>) {

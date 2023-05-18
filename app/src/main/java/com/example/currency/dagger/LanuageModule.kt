@@ -15,16 +15,16 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object LanuageModule {
     lateinit var language: String
-    lateinit var language2: String
+
     @Singleton
     @Provides
     @Named("language")
     fun read_language(@ApplicationContext context: Context): String {
-        Paper.init(context)
-        if (Paper.book().contains("language")){
-            language = Paper.book().read("language")!!
+        val sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        if (sharedPreferences.getString("language","").equals("")){
+            language = "en"
         }else{
-            language = "ar"
+            language = sharedPreferences.getString("language","")!!
         }
         return language
     }

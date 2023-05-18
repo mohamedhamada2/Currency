@@ -11,12 +11,12 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
-class DetailsViewModel  @Inject constructor(var dbHelper: DBHelper,@Named("language")var language: String) : ViewModel() {
+class DetailsViewModel  @Inject constructor(var dbHelper: DBHelper) : ViewModel() {
 
        var currencyMutableLiveData: MutableLiveData<List<CurrencyExchange>> = MutableLiveData<List<CurrencyExchange>>()
        var languageMutableLiveData :MutableLiveData<String> = MutableLiveData()
        init {
-           get_language(language)
+           //get_language(language)
            currencyMutableLiveData.value= dbHelper.readCurrency()
        }
 
