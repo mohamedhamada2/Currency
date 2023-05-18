@@ -15,8 +15,8 @@ class CurrencyRepositoryImp(var currency_api: Api,var databaseClass: DatabaseCla
 
     lateinit var currencyobservable :Single<CurrencyModel>
     lateinit var convertcurrencyobservable :Single<ConvertModel>
-    lateinit var currencylist:ArrayList<Currency>
-    lateinit var currencyvaluelist:ArrayList<String>
+    var currencylist:ArrayList<Currency> = ArrayList()
+    var currencyvaluelist:ArrayList<String> = ArrayList()
 
 
     override fun get_currency():Single<CurrencyModel>  {
