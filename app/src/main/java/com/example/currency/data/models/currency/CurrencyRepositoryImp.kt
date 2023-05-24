@@ -33,7 +33,7 @@ class CurrencyRepositoryImp(var currency_api: Api,var databaseClass: DatabaseCla
         currencyToKey: String,
         amount: Double): Single<ConvertModel> {
         convertcurrencyobservable = currency_api.convert(Constants.key,currencyFromKey,currencyToKey,amount)
-        return convertcurrencyobservable;
+        return convertcurrencyobservable
     }
 
     override fun get_currency_list_from_local_db(): ArrayList<Currency> {

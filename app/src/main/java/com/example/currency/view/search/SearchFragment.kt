@@ -1,5 +1,6 @@
 package com.example.currency.view.search
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.currency.R
+import com.example.currency.data.language.LocaleHelper
 import com.example.currency.databinding.FragmentSearchBinding
 
 /**
@@ -17,6 +19,7 @@ import com.example.currency.databinding.FragmentSearchBinding
  */
 class SearchFragment : Fragment() {
     lateinit var fragmentSearchBinding: FragmentSearchBinding
+    lateinit var language:String
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,6 +32,13 @@ class SearchFragment : Fragment() {
                 .navigate(R.id.action_searchFragment_to_bottomSheetFragment)
 
         }
+        LoadLocal()
         return view
+    }
+    private fun LoadLocal() {
+        val sharedPreferences = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE)
+        language = sharedPreferences.getString("language","")!!
+        LocaleHelper.setLocale(requireContext(),language)
+        fragmentSearchBinding.etSearch.hint = getString(R.string.search_product)
     }
 }

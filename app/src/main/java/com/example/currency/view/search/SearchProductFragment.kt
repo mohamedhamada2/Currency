@@ -1,6 +1,8 @@
 package com.example.currency.view.search
 
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currency.R
+import com.example.currency.data.language.LocaleHelper
 import com.example.currency.data.models.search.SearchModel
 import com.example.currency.databinding.FragmentBottomSheetBinding
 
@@ -27,6 +30,7 @@ class SearchProductFragment : Fragment() {
     lateinit var searchAdapter: SearchAdapter
     var searchList: ArrayList<SearchModel> = ArrayList()
     lateinit var linearLayoutManager : LinearLayoutManager
+    lateinit var language:String
     private val searchViewModel :SearchViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +43,7 @@ class SearchProductFragment : Fragment() {
         fragmentBottomSheetBinding.backImg.setOnClickListener(View.OnClickListener {
             fragmentBottomSheetBinding.root.findNavController().navigate(R.id.action_bottomSheetFragment_to_searchFragment)
         })
+        LoadLocal()
         searchViewModel.searchproductmutableLiveData.observe(viewLifecycleOwner){
             searchList = it
             init_recycler_view(searchList)
@@ -66,14 +71,22 @@ class SearchProductFragment : Fragment() {
         return fragmentBottomSheetBinding.root
     }
 
+    private fun LoadLocal() {
+        val sharedPreferences = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE)
+        language = sharedPreferences.getString("language","")!!
+        LocaleHelper.setLocale(requireContext(),language)
+        fragmentBottomSheetBinding.searchView.queryHint = getString(R.string.search_product)
+        fragmentBottomSheetBinding.toolBar.title = getString(R.string.search_product)
+    }
+
     private fun init_recycler_view(it: ArrayList<SearchModel>) {
         searchAdapter = SearchAdapter(it,this)
         search_recycler_view.adapter = searchAdapter
         linearLayoutManager = LinearLayoutManager(activity)
         search_recycler_view.layoutManager = linearLayoutManager
-        searchAdapter.notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun filter(text: String) {
         // creating a new array list to filter our data.
         val filteredlist: ArrayList<SearchModel> = ArrayList()
@@ -90,6 +103,7 @@ class SearchProductFragment : Fragment() {
         if (filteredlist.isEmpty()) {
             // if no item is added in filtered list we are
             // displaying a toast message as no data found.
+            searchAdapter.notifyDataSetChanged()
             Toast.makeText(activity, "No Data Found..", Toast.LENGTH_SHORT).show()
         } else {
             // at last we are passing that filtered

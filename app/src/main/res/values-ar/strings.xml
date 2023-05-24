@@ -20,4 +20,5 @@
     <string name="to">إلي </string>
     <string name="total">الإجمالي</string>
     <string name="base">العملة الرئيسية</string>
+    <string name="search_product">بحث عن منتج</string>
 </resources>

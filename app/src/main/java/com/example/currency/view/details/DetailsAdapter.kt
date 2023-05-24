@@ -19,7 +19,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class DetailsAdapter (private val mList: List<CurrencyExchange?>) : RecyclerView.Adapter<DetailsAdapter.ViewHolder>() {
-    lateinit var resources :Resources
+
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -41,11 +41,7 @@ class DetailsAdapter (private val mList: List<CurrencyExchange?>) : RecyclerView
                 binding.txtTo.text = this?.to_currency
                 binding.txtTotal.text= this?.total
                 binding.txtCurrencyBase.text= this?.base
-                binding.amount.text = resources.getString(R.string.amount)
-                binding.date.text = resources.getString(R.string.date)
-                binding.from.text = resources.getString(R.string.from)
-                binding.total.text = resources.getString(R.string.total)
-                binding.currencyBase.text = resources.getString(R.string.base)
+
 
             }
         }

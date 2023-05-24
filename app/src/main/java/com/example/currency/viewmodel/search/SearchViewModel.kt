@@ -12,16 +12,19 @@ class SearchViewModel @Inject constructor(var searchProductsRepositoryImp: Searc
     ViewModel() {
      var searchList : ArrayList<SearchModel> = ArrayList()
      var searchproductmutableLiveData : MutableLiveData<ArrayList<SearchModel>> = MutableLiveData<ArrayList<SearchModel>>()
-    init {
-        get_products()
-    }
-
-    private fun get_products() {
+     init {
+         get_products()
+     }
+    fun get_products() {
         searchList =searchProductsRepositoryImp.get_products()
         searchproductmutableLiveData.value = searchList
     }
 
-    fun filter_data(text: String) {
-
+    override fun onCleared() {
+        super.onCleared()
+        searchList.clear()
+        searchproductmutableLiveData.value = searchList
     }
+
+
 }

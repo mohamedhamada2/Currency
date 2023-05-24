@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currency.R
 import com.example.currency.data.language.LocaleHelper
@@ -37,19 +39,15 @@ class DetailsFragment : Fragment() {
         LoadLocal()
         detailsViewModel1.languageMutableLiveData.observe(viewLifecycleOwner){
             //init_language(it)
-            detailsViewModel1.currencyMutableLiveData.observe(viewLifecycleOwner, Observer {
-            setlist(it)
-            })
-
         }
-        /*fragmentDetailsBinding.backImg.setOnClickListener {
-            findNavController().navigate(R.id.action_detailsFragment_to_homeFragment)
-            //go_to_details()
-        }*/
+        detailsViewModel1.currencyMutableLiveData.observe(viewLifecycleOwner, Observer {
+            setlist(it)
+        })
         return fragmentDetailsBinding.root
     }
 
     private fun setlist(currencyExchanges: List<CurrencyExchange?>) {
+        Toast.makeText(activity,currencyExchanges.size.toString(),Toast.LENGTH_LONG).show()
         detailsAdapter = DetailsAdapter(currencyExchanges)
         layout_manager = LinearLayoutManager(requireContext())
         fragmentDetailsBinding.detailsRecycler.adapter = detailsAdapter
