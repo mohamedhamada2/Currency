@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/home"
+        android:title="الرئيسية"
+        android:icon="@drawable/ic_home"/>
+    <item android:id="@+id/terms"
+        android:title="الشروط والاحكام"
+        android:icon="@drawable/security_safe"/>
+    <item android:id="@+id/about"
+        android:title="عن التطبيق"
+        android:icon="@drawable/about"/>
+    <item android:id="@+id/profile"
+        android:title="الملف الشخصي"
+        android:icon="@drawable/ic_user_square"/>
+
+</menu>

@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Currency</string>
+    <string name="checkNetworkConnection">تأكد من الإتصال بالإنترنت</string>
+    <string name="sign_up">Sign up</string>
+    <string name="name">UserName</string>
+    <string name="phone">UserPhone</string>
+    <string name="user_password">UserPassword</string>
+    <string name="user_email">UserEmail</string>
+    <string name="home">Home</string>
+    <string name="exchanges">Exchanges</string>
+    <string name="alboum">Alboum</string>
+    <string name="profile">Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="select_lang">select language</string>
+    <string name="search">Search</string>
+    <string name="amount">Amount</string>
+    <string name="date">Data</string>
+    <string name="from">From</string>
+    <string name="to">to</string>
+    <string name="total">Total</string>
+    <string name="base">Currency Base</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

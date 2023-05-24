@@ -121,7 +121,6 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         // below is the variable for age column
         val to_currency = "to_currency"
-
         val exchange_rate = "exchange_rate"
         val amount = "amount"
         val total = "total"

@@ -4,23 +4,23 @@ import android.app.Application
 import androidx.annotation.NonNull
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
 import javax.inject.Singleton
 
 
 
-@Module
-class AppModule {
-    lateinit var mApplication: Application
+//@Module
+//@InstallIn(SingletonComponent::class)
+object AppModule {
+    /*lateinit var mApplication: Application
 
-    constructor(mApplication: Application) {
-        this.mApplication = mApplication
-    }
 
 
     @Provides
     @Singleton
     fun provideApplication(): Application {
         return mApplication
-    }
+    }*/
 }
