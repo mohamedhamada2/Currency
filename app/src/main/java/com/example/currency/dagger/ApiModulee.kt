@@ -9,6 +9,7 @@ import com.example.currency.constants.Constants
 import com.example.currency.data.room.DatabaseClass
 import com.example.currency.data.models.currency.CurrencyRepositoryImp
 import com.example.currency.data.models.gallery.GalleryRepositoryImp
+import com.example.currency.data.models.search.SearchProductsRepositoryImp
 import com.example.currency.data.sqlite.DBHelper
 import dagger.Module
 import dagger.Provides
@@ -97,5 +98,9 @@ object ApiModulee {
     @Singleton
     @Provides
     fun providesgalleryRepository(@Named("gallery_api")gallery_api: Api) = GalleryRepositoryImp(gallery_api)
+
+    @Singleton
+    @Provides
+    fun providesSearchProductRepository() = SearchProductsRepositoryImp()
 
 }

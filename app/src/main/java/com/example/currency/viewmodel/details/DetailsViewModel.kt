@@ -16,13 +16,7 @@ class DetailsViewModel  @Inject constructor(var dbHelper: DBHelper) : ViewModel(
        var currencyMutableLiveData: MutableLiveData<List<CurrencyExchange>> = MutableLiveData<List<CurrencyExchange>>()
        var languageMutableLiveData :MutableLiveData<String> = MutableLiveData()
        init {
-           //get_language(language)
            currencyMutableLiveData.value= dbHelper.readCurrency()
        }
-
-    private fun get_language(language: String) {
-        languageMutableLiveData.value = language
-    }
-
 
 }

@@ -24,14 +24,6 @@ class ImagesViewModel @Inject constructor(var galleryRepositoryImp: GalleryRepos
     var loading: MutableLiveData<Int> = MutableLiveData<Int>()
     lateinit var imagesAdapter: ImagesAdapter
     private var observable: Observable<GalleryModel> = BehaviorSubject.create()
-    var languageMutableLiveData :MutableLiveData<String> = MutableLiveData()
-    /*init {
-        get_language(language)
-    }*/
-
-    private fun get_language(language: String) {
-        languageMutableLiveData.value = language
-    }
 
     @SuppressLint("CheckResult")
     fun search_in_gallery(search: String, page: Int) {

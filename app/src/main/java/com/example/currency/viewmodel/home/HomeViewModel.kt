@@ -34,12 +34,8 @@ class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
     var  currencyvaluelist : ArrayList<String> = ArrayList()
     init {
         get_currency()
-        //get_language(language)
     }
 
-    private fun get_language(language: String) {
-        languageMutableLiveData.value = language
-    }
 
     fun get_currency() {
         if (connect_network){
@@ -55,11 +51,6 @@ class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
     private fun get_currency_from_local_db() {
         currencylist = currencyRepositoryImp.get_currency_list_from_local_db()
         currencyvaluelist = currencyRepositoryImp.get_currency_value_list_from_local_db()
-        /*currencylist = databaseClass.dao?.get_all_currency_symbols() as ArrayList<Currency>
-        for (currency in currencylist) {
-            currencyvaluelist.add(currency.key)
-            //currencybasevaluelist.add(currency.key)
-        }*/
         currencyLiveData.value = currencylist
         currencyvalueMutableLiveData.value = currencyvaluelist
     }

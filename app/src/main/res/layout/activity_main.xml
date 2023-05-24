@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:background="#f0f0f0" >
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
@@ -29,8 +30,7 @@
             app:layout_constraintBottom_toBottomOf="@id/bottomNavigationView"
             app:defaultNavHost="true"
             android:layout_marginBottom="60dp"
-            app:navGraph="@navigation/currency_nav"
-            android:background="#f0f0f0" />
+            app:navGraph="@navigation/currency_nav" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

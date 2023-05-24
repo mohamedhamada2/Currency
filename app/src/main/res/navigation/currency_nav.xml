@@ -30,5 +30,38 @@
         android:name="com.example.currency.view.gallery.ImagesFragment"
         android:label="fragment_images"
         tools:layout="@layout/fragment_images" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.currency.view.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_bottomSheetFragment"
+            app:destination="@id/bottomSheetFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bottomSheetFragment"
+        android:name="com.example.currency.view.search.SearchProductFragment"
+        android:label="fragment_bottom_sheet"
+        tools:layout="@layout/fragment_bottom_sheet" >
+        <action
+            android:id="@+id/action_bottomSheetFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_bottomSheetFragment_to_productsFragment"
+            app:destination="@id/productsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productsFragment"
+        android:name="com.example.currency.ProductsFragment"
+        android:label="fragment_products"
+        tools:layout="@layout/fragment_products" >
+        <action
+            android:id="@+id/action_productsFragment_to_bottomSheetFragment"
+            app:destination="@id/bottomSheetFragment" />
+        <action
+            android:id="@+id/action_productsFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
 
 </navigation>

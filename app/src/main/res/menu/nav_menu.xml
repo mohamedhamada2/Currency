@@ -3,7 +3,7 @@
     <item android:id="@+id/homeFragment"
         android:title="@string/home"
         android:icon="@drawable/money_exchange"/>
-    <item android:id="@+id/detailsFragment"
+    <item android:id="@+id/searchFragment"
         android:title="@string/exchanges"
         android:icon="@drawable/database"/>
     <item android:id="@+id/imagesFragment"

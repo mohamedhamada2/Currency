@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="searchproductviewmodel"
+            type="com.example.currency.viewmodel.search.SearchViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/bottomsheetcontainer">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="#0f0f0f"
+            app:title="Search for product"
+            app:titleTextColor="@color/white"
+            app:titleTextAppearance="@style/tool_bar"/>
+
+        <ImageView
+            android:id="@+id/back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/baseline_arrow_back_24"
+            app:layout_constraintBottom_toBottomOf="@+id/search_view"
+            app:layout_constraintEnd_toStartOf="@id/search_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/search_view"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"/>
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tool_bar"
+            app:layout_constraintStart_toEndOf="@+id/back_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:iconifiedByDefault="false"
+            android:layout_margin="8dp"
+            app:queryHint="Search for product"
+            android:fontFamily="@font/cairo_medium2"
+            android:textAppearance="@style/tool_bar"
+            app:submitBackground="@color/black"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/search_view"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="8dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
