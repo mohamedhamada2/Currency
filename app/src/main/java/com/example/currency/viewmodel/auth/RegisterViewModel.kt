@@ -1,4 +1,4 @@
-package com.example.currency.viewmodel.register
+package com.example.currency.viewmodel.auth
 
 import android.text.TextUtils
 import android.view.View

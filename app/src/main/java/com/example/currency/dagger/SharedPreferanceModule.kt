@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.currency.data.models.user.UserRepositoryImp
 import com.example.currency.data.models.user.UserSharedPreferance
-import com.example.currency.view.register.RegisterActivity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,10 +33,5 @@ object SharedPreferanceModule {
     @Provides
     fun providesuserRepository(userSharedPreferance: UserSharedPreferance,@ApplicationContext context: Context) = UserRepositoryImp(userSharedPreferance,context)
 
-    @Singleton
-    @Provides
-    fun providesActivtiy(@ApplicationContext context: Context): Context {
-        var  registerActivity : RegisterActivity = context as RegisterActivity
-        return registerActivity
-    }
+
 }
