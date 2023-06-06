@@ -1,7 +1,6 @@
 package com.example.currency.view.profile
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -14,8 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.currency.R
-import com.example.currency.data.language.LocaleHelper
-import com.example.currency.data.models.user.UserModel
+import com.example.domain.entity.user.UserModel
 import com.example.currency.databinding.FragmentPofileBinding
 import com.example.currency.viewmodel.profile.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint

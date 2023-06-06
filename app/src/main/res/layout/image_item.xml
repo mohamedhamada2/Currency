@@ -3,7 +3,7 @@
     <data>
         <variable
             name="photo"
-            type="com.example.currency.data.models.gallery.Photo" />
+            type="com.example.domain.entity.gallery.Photo" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

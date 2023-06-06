@@ -53,12 +53,10 @@ class LoginFragment : Fragment() {
     private fun getFacebookData(jsonObject: JSONObject?) {
         val profilePic = "https://graph.facebook.com/${jsonObject
             ?.getString("id")}/picture?width=500&height=500"
-
         val name = jsonObject?.getString("name")
         val birthday = jsonObject?.getString("birthday")
         val gender = jsonObject?.getString("gender")
         val email = jsonObject?.getString("email")
-
         fragmentLoginBinding.userName.text = "Name: ${name}"
         fragmentLoginBinding.userEmail.text = "Email: ${email}"
         fragmentLoginBinding.userBDay.text = "Birthday: ${birthday}"

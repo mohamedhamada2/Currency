@@ -1,14 +1,10 @@
 package com.example.currency.viewmodel.auth
 
-import android.text.TextUtils
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.currency.data.models.user.UserModel
-import com.example.currency.data.models.user.UserRepositoryImp
+import com.example.data.repo.user.UserRepositoryImp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import javax.inject.Named
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(var userRepositoryImp: UserRepositoryImp): ViewModel() {

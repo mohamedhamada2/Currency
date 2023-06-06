@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.currency.R
-import com.example.currency.data.language.LocaleHelper
+import com.example.data.language.LocaleHelper
 import com.example.currency.databinding.FragmentSearchBinding
 
 /**

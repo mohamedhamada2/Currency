@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.currency.R
-import com.example.currency.data.language.LocaleHelper
+import com.example.data.language.LocaleHelper
 import com.example.currency.databinding.FragmentImagesBinding
 import com.example.currency.viewmodel.gallery.ImagesViewModel
 import dagger.hilt.android.AndroidEntryPoint

@@ -14,8 +14,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currency.R
-import com.example.currency.data.language.LocaleHelper
-import com.example.currency.data.room.CurrencyExchange
+import com.example.data.language.LocaleHelper
+import com.example.data.local.room.CurrencyExchange
 import com.example.currency.databinding.FragmentDetailsBinding
 import com.example.currency.viewmodel.details.DetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint

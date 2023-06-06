@@ -16,8 +16,8 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currency.R
-import com.example.currency.data.language.LocaleHelper
-import com.example.currency.data.models.search.SearchModel
+import com.example.data.language.LocaleHelper
+import com.example.domain.entity.search.SearchModel
 import com.example.currency.databinding.FragmentBottomSheetBinding
 
 import com.example.currency.viewmodel.search.SearchViewModel

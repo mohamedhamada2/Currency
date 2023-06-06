@@ -4,11 +4,9 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.currency.constants.Constants
-import com.example.currency.data.models.gallery.GalleryModel
-import com.example.currency.data.models.gallery.GalleryRepositoryImp
-import com.example.currency.data.models.gallery.Photo
+import com.example.data.constants.Constants
 import com.example.currency.view.gallery.ImagesAdapter
+import com.example.domain.usecase.gallery.GetGallery
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -19,23 +17,23 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
-class ImagesViewModel @Inject constructor(var galleryRepositoryImp: GalleryRepositoryImp, @Named("network_connection")var connect_network:Boolean):ViewModel() {
+class ImagesViewModel @Inject constructor(var getGallery: GetGallery, @Named("network_connection")var connect_network:Boolean):ViewModel() {
     var galleryadapterLiveData: MutableLiveData<ImagesAdapter> = MutableLiveData<ImagesAdapter>()
     var loading: MutableLiveData<Int> = MutableLiveData<Int>()
     lateinit var imagesAdapter: ImagesAdapter
-    private var observable: Observable<GalleryModel> = BehaviorSubject.create()
+    private var observable: Observable<com.example.domain.entity.gallery.GalleryModel> = BehaviorSubject.create()
 
     @SuppressLint("CheckResult")
     fun search_in_gallery(search: String, page: Int) {
         if (connect_network){
             observable.debounce(3,TimeUnit.SECONDS)
-            observable = galleryRepositoryImp.get_gallery(Constants.gallery_key, search, page)
+            observable = getGallery.get_gallery(Constants.gallery_key, search, page)
                 .subscribeOn(Schedulers.io())
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
 
             observable.subscribe(
-                { o: GalleryModel? ->
+                { o: com.example.domain.entity.gallery.GalleryModel? ->
                     if (o != null) {
                         if (!o.photos.isEmpty()) {
                             setAdapter(o)
@@ -43,7 +41,7 @@ class ImagesViewModel @Inject constructor(var galleryRepositoryImp: GalleryRepos
 
                         } else {
                             setAdapter(o)
-                            imagesAdapter = ImagesAdapter(o.photos as ArrayList<Photo>)
+                            imagesAdapter = ImagesAdapter(o.photos as ArrayList<com.example.domain.entity.gallery.Photo>)
                             loading.value = 0
 
                         }
@@ -59,20 +57,20 @@ class ImagesViewModel @Inject constructor(var galleryRepositoryImp: GalleryRepos
 
     }
 
-    private fun setAdapter(o: GalleryModel) {
-        imagesAdapter = ImagesAdapter(o.photos as ArrayList<Photo>)
+    private fun setAdapter(o: com.example.domain.entity.gallery.GalleryModel) {
+        imagesAdapter = ImagesAdapter(o.photos as ArrayList<com.example.domain.entity.gallery.Photo>)
         galleryadapterLiveData.value = imagesAdapter
     }
 
     @SuppressLint("CheckResult")
     fun load_more_search_in_gallery(search: String, page: Int) {
         if (connect_network){
-            observable = galleryRepositoryImp.get_gallery(Constants.key, search, page)
+            observable = getGallery.get_gallery(Constants.key, search, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 
             observable.subscribe(
-                { o: GalleryModel? ->
+                { o: com.example.domain.entity.gallery.GalleryModel? ->
                     if (o != null) {
                         if (!o.photos.isEmpty()) {
                             add_photo(o)
@@ -87,7 +85,7 @@ class ImagesViewModel @Inject constructor(var galleryRepositoryImp: GalleryRepos
         }
     }
 
-    private fun add_photo(o: GalleryModel) {
+    private fun add_photo(o: com.example.domain.entity.gallery.GalleryModel) {
         imagesAdapter.add_photo(o.photos);
     }
 }

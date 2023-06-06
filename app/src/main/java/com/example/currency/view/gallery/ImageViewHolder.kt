@@ -3,9 +3,8 @@ package com.example.currency.view.gallery
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.currency.constants.GlideApp
-import com.example.currency.data.models.gallery.Photo
-
+import com.bumptech.glide.Glide
+import com.example.domain.entity.gallery.Photo
 import com.example.currency.databinding.ImageItemBinding
 
 
@@ -20,7 +19,7 @@ class ImageViewHolder (private val binding: ImageItemBinding): RecyclerView.View
         @JvmStatic
         @BindingAdapter("imageUrl")
         fun loadImage(imageView: ImageView, url: String) {
-            GlideApp.with(imageView.context).load(url).into(imageView)
+            Glide.with(imageView.context).load(url).into(imageView)
         }
     }
 }

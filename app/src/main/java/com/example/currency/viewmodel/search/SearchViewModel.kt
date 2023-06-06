@@ -2,8 +2,8 @@ package com.example.currency.viewmodel.search
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.currency.data.models.search.SearchModel
-import com.example.currency.data.models.search.SearchProductsRepositoryImp
+import com.example.domain.entity.search.SearchModel
+import com.example.data.repo.search.SearchProductsRepositoryImp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

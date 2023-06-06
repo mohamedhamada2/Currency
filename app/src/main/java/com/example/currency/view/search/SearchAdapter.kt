@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currency.R
-import com.example.currency.data.models.search.SearchModel
+import com.example.domain.entity.search.SearchModel
 
 // on below line we are creating a course rv adapter class.
 class SearchAdapter(

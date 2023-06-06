@@ -2,10 +2,11 @@ package com.example.currency.viewmodel.home
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.currency.data.models.currency.Currency
-import com.example.currency.data.models.currency.CurrencyModel
-import com.example.currency.data.models.convert.ConvertModel
-import com.example.currency.data.models.currency.CurrencyRepositoryImp
+import com.example.data.repo.currency.CurrencyRepositoryImp
+import com.example.domain.entity.convert.ConvertModel
+import com.example.domain.entity.currency.Currency
+import com.example.domain.entity.currency.CurrencyModel
+import com.example.domain.usecase.currency.GetCurrency
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
@@ -15,16 +16,16 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepositoryImp,
+class HomeViewModel @Inject constructor(var getCurrency: GetCurrency,
                                         @Named("network_connection")var connect_network:Boolean) : ViewModel() {
 
-    var currencyMutableLiveData: MutableLiveData<CurrencyModel?> = MutableLiveData<CurrencyModel?>()
+    var currencyMutableLiveData: MutableLiveData<com.example.domain.entity.currency.CurrencyModel?> = MutableLiveData<CurrencyModel?>()
     var convertcurrencyLiveData: MutableLiveData<ConvertModel> = MutableLiveData<ConvertModel>()
     var currencyLiveData :MutableLiveData<ArrayList<Currency>> = MutableLiveData<ArrayList<Currency>>()
     var currencyvalueMutableLiveData: MutableLiveData< ArrayList<String>> = MutableLiveData<ArrayList<String>>()
     var errorMutableLiveData :MutableLiveData<String> = MutableLiveData<String>()
     var languageMutableLiveData :MutableLiveData<String> = MutableLiveData()
-    lateinit var currency_single :Single<CurrencyModel>
+    lateinit var currency_single :Single<com.example.domain.entity.currency.CurrencyModel>
     lateinit var convert_currency_single: Single<ConvertModel>
     var compositeDisposable:CompositeDisposable = CompositeDisposable()
     var currencylist: ArrayList<Currency> = ArrayList()
@@ -36,9 +37,9 @@ class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
 
     fun get_currency() {
         if (connect_network){
-            currency_single = currencyRepositoryImp.get_currency().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            currency_single = getCurrency.get_currency().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             compositeDisposable.add(currency_single.subscribe(
-                { o: CurrencyModel? -> setCurrencyData(o) },
+                { o: com.example.domain.entity.currency.CurrencyModel? -> setCurrencyData(o) },
                 { e: Throwable -> get_error_data(e) }))
         }else{
             get_currency_from_local_db()
@@ -46,8 +47,8 @@ class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
     }
 
     private fun get_currency_from_local_db() {
-        currencylist = currencyRepositoryImp.get_currency_list_from_local_db()
-        currencyvaluelist = currencyRepositoryImp.get_currency_value_list_from_local_db()
+        currencylist = getCurrency.get_currency_list_from_local_db()
+        currencyvaluelist = getCurrency.get_currency_value_list_from_local_db()
         currencyLiveData.value = currencylist
         currencyvalueMutableLiveData.value = currencyvaluelist
     }
@@ -63,31 +64,16 @@ class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
     }
 
     private fun setCurrencyData(currencymodel: CurrencyModel?) {
-        currencylist = currencyRepositoryImp.get_currency_list_from_api(currencymodel)
-        currencyvaluelist = currencyRepositoryImp.get_currency_value_list_from_api()
+        currencylist = getCurrency.get_currency_list_from_api(currencymodel)
+        currencyvaluelist = getCurrency.get_currency_value_list_from_api()
         currencyLiveData.value = currencylist
         currencyvalueMutableLiveData.value = currencyvaluelist
-        /*currencymodel?.symbols?.keys.let{ keys ->
-            for (key in keys!!) {
-                var value = currencymodel?.symbols?.getValue(key)
-                val currency = value?.let { Currency(key, it) }
-                //databaseClass?.dao?.AddCurrencySymbols(currency)
-                currency?.let { currencylist.add(it) }
-                databaseClass.dao?.AddCurrencySymbols(currency)
-                currencyMutableLiveData.value = currencymodel
-                for (currency in currencylist) {
-                    currencyvaluelist.add(currency.key)
-                }
-                currencyvalueMutableLiveData.value = currencyvaluelist
-                currencyLiveData.value = currencylist
-            }
-        }*/
-            //homeFragment.setSpinnerAdapter(currencylist,currencyvaluelist)
+
     }
     fun convert_currency(currencyFromKey: String, currencyToKey: String, amount: Double) {
         if (connect_network) {
             convert_currency_single =
-                currencyRepositoryImp.convert_currency(currencyFromKey, currencyToKey, amount)
+                getCurrency.convert_currency(currencyFromKey, currencyToKey, amount)
                     .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             compositeDisposable.add(
                 convert_currency_single.subscribe(
@@ -99,7 +85,7 @@ class HomeViewModel @Inject constructor(var currencyRepositoryImp: CurrencyRepos
 
     fun addCurrency(from: String, to: String, rate: String, amount: String, result: String, date: String) {
         //dbHelper.addCurrency(from,to,rate,amount,result,date)
-        currencyRepositoryImp.save_currency_converter(from,to,rate,amount,result,date)
+        getCurrency.save_currency_converter(from,to,rate,amount,result,date)
     }
     /*fun addCurrency(from: String, to: String, rate: String, amount: String, result: String, date: String) {
         dbHelper.addCurrency(from,to,rate,amount,result,date)

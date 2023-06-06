@@ -13,7 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.example.currency.R
-import com.example.currency.data.language.LocaleHelper
+import com.example.data.language.LocaleHelper
 import com.example.currency.databinding.FragmentRegisterationBinding
 import com.example.currency.view.main.MainActivity
 import com.example.currency.viewmodel.auth.RegisterViewModel

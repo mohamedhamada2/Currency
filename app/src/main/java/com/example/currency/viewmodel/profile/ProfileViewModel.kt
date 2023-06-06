@@ -1,15 +1,11 @@
 package com.example.currency.viewmodel.profile
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.currency.data.models.user.UserModel
-import com.example.currency.data.models.user.UserRepositoryImp
-import com.example.currency.data.models.user.UserSharedPreferance
+import com.example.domain.entity.user.UserModel
+import com.example.data.repo.user.UserRepositoryImp
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
-import javax.inject.Named
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(var userRepositoryImp: UserRepositoryImp): ViewModel() {

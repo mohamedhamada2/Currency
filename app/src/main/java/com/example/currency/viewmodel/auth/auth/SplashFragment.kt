@@ -11,8 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.example.currency.R
-import com.example.currency.data.models.user.UserModel
-import com.example.currency.data.models.user.UserSharedPreferance
+import com.example.domain.entity.user.UserModel
+import com.example.data.local.UserSharedPreferance
 import com.example.currency.databinding.FragmentSplashBinding
 import com.example.currency.view.main.MainActivity
 import com.example.currency.viewmodel.auth.SplashViewModel

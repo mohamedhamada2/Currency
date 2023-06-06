@@ -12,8 +12,8 @@ import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currency.R
-import com.example.currency.data.language.LocaleHelper
-import com.example.currency.data.room.CurrencyExchange
+import com.example.data.language.LocaleHelper
+import com.example.data.local.room.CurrencyExchange
 import com.example.currency.databinding.CurrencyItemBinding
 import javax.inject.Inject
 import javax.inject.Named

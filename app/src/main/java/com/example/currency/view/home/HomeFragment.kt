@@ -1,6 +1,5 @@
 package com.example.currency.view.home
 import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,11 +12,10 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.example.currency.R
-import com.example.currency.data.language.LocaleHelper
-import com.example.currency.data.models.currency.Currency
+import com.example.data.language.LocaleHelper
+import com.example.domain.entity.currency.Currency
 import com.example.currency.databinding.FragmentHomeBinding
 import com.example.currency.viewmodel.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +32,6 @@ class HomeFragment : Fragment() {
     var currency_to_key: String? = null
     lateinit var date:String
     lateinit var fragmentHomeBinding: FragmentHomeBinding
-
     lateinit var convertfromAdapter: ArrayAdapter<String>
     lateinit var converttoAdapter: ArrayAdapter<String>
     lateinit var language: String
