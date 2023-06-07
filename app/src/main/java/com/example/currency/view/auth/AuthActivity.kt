@@ -1,4 +1,4 @@
-package com.example.currency.viewmodel.auth.auth
+package com.example.currency.view.auth
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

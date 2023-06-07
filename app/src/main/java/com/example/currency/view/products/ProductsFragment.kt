@@ -1,13 +1,13 @@
-package com.example.currency
+package com.example.currency.view.products
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import com.example.currency.R
 import com.example.currency.databinding.FragmentProductsBinding
 
 
@@ -20,7 +20,8 @@ class ProductsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        fragmentProductsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_products, container, false)
+        fragmentProductsBinding = DataBindingUtil.inflate(inflater,
+            R.layout.fragment_products, container, false)
         getData()
         fragmentProductsBinding.backImg.setOnClickListener(View.OnClickListener {
             fragmentProductsBinding.root.findNavController().navigate(R.id.action_productsFragment_to_searchFragment)

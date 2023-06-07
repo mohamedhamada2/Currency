@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.currency.viewmodel.auth.auth.SplashFragment"
+        android:name="com.example.currency.view.auth.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action
@@ -19,12 +19,12 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.currency.viewmodel.auth.auth.LoginFragment"
+        android:name="com.example.currency.view.auth.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
     <fragment
         android:id="@+id/registerationFragment"
-        android:name="com.example.currency.viewmodel.auth.auth.RegisterationFragment"
+        android:name="com.example.currency.view.auth.RegisterationFragment"
         android:label="fragment_registeration"
         tools:layout="@layout/fragment_registeration" >
         <action

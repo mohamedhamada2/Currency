@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".viewmodel.auth.auth.RegisterationFragment"
+    tools:context=".view.auth.RegisterationFragment"
     android:background="#f0f0f0">
     <RelativeLayout
         android:id="@+id/relative1"
@@ -191,7 +191,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/relative5"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
@@ -202,13 +202,25 @@
                 android:textSize="16sp"
                 android:padding="5dp"
                 android:background="@drawable/btn_login_background"/>
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/google_sign_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_register"/>
             <ImageView
                 android:id="@+id/facebook_img"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/com_facebook_button_icon"
                 android:backgroundTint="@color/com_facebook_blue"
-                app:layout_constraintTop_toBottomOf="@+id/btn_register"
+                app:layout_constraintTop_toBottomOf="@+id/google_sign_in"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/twitter_img"
                 android:layout_marginTop="20dp"
@@ -219,7 +231,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/twitter"
-                app:layout_constraintTop_toBottomOf="@+id/btn_register"
+                app:layout_constraintTop_toBottomOf="@+id/google_sign_in"
                 app:layout_constraintStart_toEndOf="@+id/facebook_img"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="20dp"

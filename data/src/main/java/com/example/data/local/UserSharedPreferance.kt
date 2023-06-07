@@ -9,10 +9,6 @@ import com.google.gson.Gson
 class UserSharedPreferance {
 
     var mPrefs: SharedPreferences? = null
-
-    constructor()
-
-
     fun Create_Update_UserData(context: Context, userModel: UserModel?) {
         mPrefs = context.getSharedPreferences("user", Context.MODE_PRIVATE)
         val gson = Gson()

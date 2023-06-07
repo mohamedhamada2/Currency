@@ -1,4 +1,4 @@
-package com.example.currency.viewmodel.auth.auth
+package com.example.currency.view.auth
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

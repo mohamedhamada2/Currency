@@ -57,7 +57,7 @@
     </fragment>
     <fragment
         android:id="@+id/productsFragment"
-        android:name="com.example.currency.ProductsFragment"
+        android:name="com.example.currency.view.products.ProductsFragment"
         android:label="fragment_products"
         tools:layout="@layout/fragment_products" >
         <action

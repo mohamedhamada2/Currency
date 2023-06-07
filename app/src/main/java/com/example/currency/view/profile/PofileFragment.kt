@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
 import com.example.currency.R
 import com.example.domain.entity.user.UserModel
 import com.example.currency.databinding.FragmentPofileBinding
@@ -68,9 +69,6 @@ class PofileFragment : Fragment() {
         profileViewModel.userdata_MutableLiveData.observe(viewLifecycleOwner) {
             setData(it)
         }
-        profileViewModel.languageMutableLiveData.observe(viewLifecycleOwner){
-            //updateview(it)
-        }
     }
 
     private fun setData(userModel: UserModel?) {
@@ -78,6 +76,7 @@ class PofileFragment : Fragment() {
         fragmentPofileBinding.etEmail.setText(userModel.user_email)
         fragmentPofileBinding.etPassword.setText(userModel.user_password)
         fragmentPofileBinding.etPhone.setText(userModel.user_phone)
+        Glide.with(requireContext()).load(userModel.user_img).into(fragmentPofileBinding.userImg)
         //Toast.makeText(requireContext(), userModel!!.user_name,Toast.LENGTH_LONG).show()
     }
     private fun setLocale(language: String) {

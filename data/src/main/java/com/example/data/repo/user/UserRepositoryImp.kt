@@ -10,12 +10,13 @@ class UserRepositoryImp (var userSharedPreferance: UserSharedPreferance, var con
     UserRepository {
     var save_date:Boolean = false
     override fun update_user_data(
-        name: String,
-        phone: String,
-        email: String,
-        password: String
+        name: String?,
+        phone: String?,
+        email: String?,
+        password: String,
+        userimg:String
     ): Boolean {
-        val userModel = UserModel(name,phone,email,password)
+        val userModel = UserModel(name!!, phone!!, email!!,password, userimg)
         userSharedPreferance.Create_Update_UserData(context,userModel)
         save_date = true
         return save_date
