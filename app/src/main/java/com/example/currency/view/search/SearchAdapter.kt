@@ -45,7 +45,7 @@ class SearchAdapter(
         // on below line we are setting data to our text view and our image view.
         holder.courseNameTV.text = courseList[position].Name
         holder.itemView.setOnClickListener(View.OnClickListener {
-            searchProductFragment.sendData(courseList[position].Name)
+            searchProductFragment.sendData(courseList[position])
         })
     }
 

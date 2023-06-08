@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.currency.R
 import com.example.currency.databinding.FragmentProductsBinding
 
@@ -14,6 +15,7 @@ import com.example.currency.databinding.FragmentProductsBinding
 class ProductsFragment : Fragment() {
     lateinit var fragmentProductsBinding: FragmentProductsBinding
      var name: String? = null
+    private val args : ProductsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +32,7 @@ class ProductsFragment : Fragment() {
     }
 
     private fun getData() {
-        name = arguments?.getString("name")
-        fragmentProductsBinding.txtTitle.text = name
+        val searchModel = args.search
+        fragmentProductsBinding.txtTitle.text = searchModel.Name
     }
 }

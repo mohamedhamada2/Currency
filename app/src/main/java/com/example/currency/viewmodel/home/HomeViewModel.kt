@@ -16,8 +16,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(var getCurrency: GetCurrency,
-                                        @Named("network_connection")var connect_network:Boolean) : ViewModel() {
+class HomeViewModel @Inject constructor(private val getCurrency: GetCurrency, @Named("network_connection")private val connect_network:Boolean) : ViewModel() {
 
     var currencyMutableLiveData: MutableLiveData<com.example.domain.entity.currency.CurrencyModel?> = MutableLiveData<CurrencyModel?>()
     var convertcurrencyLiveData: MutableLiveData<ConvertModel> = MutableLiveData<ConvertModel>()
@@ -25,7 +24,7 @@ class HomeViewModel @Inject constructor(var getCurrency: GetCurrency,
     var currencyvalueMutableLiveData: MutableLiveData< ArrayList<String>> = MutableLiveData<ArrayList<String>>()
     var errorMutableLiveData :MutableLiveData<String> = MutableLiveData<String>()
     var languageMutableLiveData :MutableLiveData<String> = MutableLiveData()
-    lateinit var currency_single :Single<com.example.domain.entity.currency.CurrencyModel>
+    lateinit var currency_single :Single<CurrencyModel>
     lateinit var convert_currency_single: Single<ConvertModel>
     var compositeDisposable:CompositeDisposable = CompositeDisposable()
     var currencylist: ArrayList<Currency> = ArrayList()
@@ -39,7 +38,7 @@ class HomeViewModel @Inject constructor(var getCurrency: GetCurrency,
         if (connect_network){
             currency_single = getCurrency.get_currency().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             compositeDisposable.add(currency_single.subscribe(
-                { o: com.example.domain.entity.currency.CurrencyModel? -> setCurrencyData(o) },
+                { o: CurrencyModel? -> setCurrencyData(o) },
                 { e: Throwable -> get_error_data(e) }))
         }else{
             get_currency_from_local_db()

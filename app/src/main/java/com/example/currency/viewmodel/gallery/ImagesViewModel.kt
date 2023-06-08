@@ -17,7 +17,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
-class ImagesViewModel @Inject constructor(var getGallery: GetGallery, @Named("network_connection")var connect_network:Boolean):ViewModel() {
+class ImagesViewModel @Inject constructor(private val getGallery: GetGallery, @Named("network_connection")val connect_network:Boolean):ViewModel() {
     var galleryadapterLiveData: MutableLiveData<ImagesAdapter> = MutableLiveData<ImagesAdapter>()
     var loading: MutableLiveData<Int> = MutableLiveData<Int>()
     lateinit var imagesAdapter: ImagesAdapter

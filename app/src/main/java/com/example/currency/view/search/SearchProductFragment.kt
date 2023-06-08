@@ -94,7 +94,7 @@ class SearchProductFragment : Fragment() {
         // running a for loop to compare elements.
         for (item in searchList) {
             // checking if the entered string matched with any item of our recycler view.
-            if (item.Name.toLowerCase().contains(text.toLowerCase())) {
+            if (item.Name?.toLowerCase()?.contains(text.toLowerCase())!!) {
                 // if the item is matched we are
                 // adding it to our filtered list.
                 filteredlist.add(item)
@@ -112,9 +112,9 @@ class SearchProductFragment : Fragment() {
         }
     }
 
-    fun sendData(name: String) {
-        val bundle = Bundle()
-        bundle.putString("name", name)
-        fragmentBottomSheetBinding.root.findNavController().navigate(R.id.action_bottomSheetFragment_to_productsFragment, bundle)
+    fun sendData(search: SearchModel) {
+        val action = SearchProductFragmentDirections.actionBottomSheetFragmentToProductsFragment(search)
+        fragmentBottomSheetBinding.root.findNavController().navigate(action)
+
     }
 }
